@@ -1,0 +1,15 @@
+id
+user
+username
+account
+email
+token
+auth
+key
+debug
+admin
+role
+uid
+profile
+access
+password
