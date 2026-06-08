@@ -1,0 +1,510 @@
+1776595235815	geckodriver	INFO	Listening on 127.0.0.1:52957
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595237711	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "45203" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofile4OKFVm"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595240842	geckodriver	INFO	Listening on 127.0.0.1:53639
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595242829	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "57419" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileBT0kmt"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595245964	geckodriver	INFO	Listening on 127.0.0.1:44709
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595247324	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "32943" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilewyUOTm"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595249702	geckodriver	INFO	Listening on 127.0.0.1:50937
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595250886	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "59773" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofile7OC66f"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595253748	geckodriver	INFO	Listening on 127.0.0.1:45813
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595255835	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "36423" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilehXbdj5"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595258638	geckodriver	INFO	Listening on 127.0.0.1:53087
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595260385	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "45537" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilelJZObt"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595263260	geckodriver	INFO	Listening on 127.0.0.1:40607
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595265235	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "38413" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileCNgZ5w"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595267748	geckodriver	INFO	Listening on 127.0.0.1:58847
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595269309	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "41039" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofile9KYrUz"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595271728	geckodriver	INFO	Listening on 127.0.0.1:58235
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595271945	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "58059" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilenP5Mw4"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595272386	geckodriver	INFO	Listening on 127.0.0.1:51599
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595272556	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "42233" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileWjWjiP"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595403568	geckodriver	INFO	Listening on 127.0.0.1:59649
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595405517	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "34065" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileEw4c3l"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595408076	geckodriver	INFO	Listening on 127.0.0.1:57417
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595410327	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "56445" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilepCTzaX"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595411478	geckodriver	INFO	Listening on 127.0.0.1:47217
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595411864	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "45889" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileo0ZjsG"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595412219	geckodriver	INFO	Listening on 127.0.0.1:33379
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595412475	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "54771" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileDadhG9"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595412944	geckodriver	INFO	Listening on 127.0.0.1:33587
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595413199	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "48715" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileBkGW8c"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595413630	geckodriver	INFO	Listening on 127.0.0.1:38461
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595414019	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "33695" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileXehD2F"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595414411	geckodriver	INFO	Listening on 127.0.0.1:56785
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595414747	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "57341" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilezvi6T8"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595415083	geckodriver	INFO	Listening on 127.0.0.1:40319
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595415291	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "46483" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileukgNcb"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595415711	geckodriver	INFO	Listening on 127.0.0.1:58371
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595416002	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "56353" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileobVDHv"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595416381	geckodriver	INFO	Listening on 127.0.0.1:60267
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1776595416587	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "44365" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileVwnJvs"
+Running Firefox as root in a regular user's session is not supported.  ($XAUTHORITY is /home/kali/.Xauthority which is owned by kali.)
+1779729303800	geckodriver	INFO	Listening on 127.0.0.1:49765
+1779729308449	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "38449" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofile0KBsdJ"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779729316775	Marionette	INFO	Marionette enabled
+1779729319929	Marionette	INFO	Listening on port 34473
+Read port: 34473
+WebDriver BiDi listening on ws://127.0.0.1:38449
+Read port: 34473
+Read port: 34473
+Read port: 34473
+Read port: 34473
+Read port: 34473
+1779729328467	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1779729395470	geckodriver	INFO	Listening on 127.0.0.1:57137
+1779729396333	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "56717" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileL9WVuy"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779729402939	Marionette	INFO	Marionette enabled
+1779729403359	Marionette	INFO	Listening on port 43739
+Read port: 43739
+WebDriver BiDi listening on ws://127.0.0.1:56717
+1779729404139	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1779729437493	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+DevTools listening on ws://127.0.0.1:56717/devtools/browser/5e7a2c11-d9e0-412d-883a-ff8fd7e7882c
+1779729439812	geckodriver	INFO	Listening on 127.0.0.1:45127
+1779729440865	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "36673" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileRna9Gh"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779729460135	Marionette	INFO	Marionette enabled
+1779729461953	Marionette	INFO	Listening on port 33577
+Read port: 33577
+WebDriver BiDi listening on ws://127.0.0.1:36673
+Read port: 33577
+1779729469332	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1779729484258	Marionette	INFO	Stopped listening on port 43739
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+console.error: services.settings: 
+  security-state/intermediates Signature failed  Error: Shutdown, aborting read-only worker requests.
+console.error: services.settings: 
+  Message: Error: Shutdown, aborting read-only worker requests.
+  Stack:
+    _abortCancelableRequests@resource://services-settings/RemoteSettingsWorker.sys.mjs:131:19
+@resource://services-settings/RemoteSettingsWorker.sys.mjs:207:28
+trigger@resource://gre/modules/AsyncShutdown.sys.mjs:754:23
+_wait@resource://gre/modules/AsyncShutdown.sys.mjs:914:15
+wait@resource://gre/modules/AsyncShutdown.sys.mjs:895:34
+observe@resource://gre/modules/AsyncShutdown.sys.mjs:554:10
+
+console.error: (new Error("IndexedDB: main/nimbus-secure-experiments getLastModified() IndexedDB:  execute() The application is shutting down", "resource://services-settings/IDBHelpers.sys.mjs", 16))
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.error: (new RemoteSettingsWorkerError("Error: Can't import when we've started shutting down.", "resource://services-settings/RemoteSettingsWorker.sys.mjs", 34))
+1779729513544	geckodriver	INFO	Listening on 127.0.0.1:49067
+1779729514433	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "48381" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileXwpUoT"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779729523168	Marionette	INFO	Marionette enabled
+1779729524381	Marionette	INFO	Listening on port 36023
+Read port: 36023
+WebDriver BiDi listening on ws://127.0.0.1:48381
+1779729526247	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1779729544978	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:36673/devtools/browser/8c5dcc8c-3deb-4a60-857f-0cbbd8b3e1b3
+1779729557113	geckodriver	INFO	Listening on 127.0.0.1:54219
+1779729558196	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "58207" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileTdQSDZ"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779729582774	Marionette	INFO	Marionette enabled
+1779729588792	Marionette	INFO	Listening on port 35565
+Read port: 35565
+Read port: 35565
+WebDriver BiDi listening on ws://127.0.0.1:58207
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+Read port: 35565
+1779729615200	Marionette	INFO	Stopped listening on port 33577
+Read port: 35565
+Read port: 35565
+Read port: 35565
+WARNING: At least one completion condition is taking too long to complete. Conditions: [{"name":"SessionStore: flushing all windows","state":{"total":1,"current":0},"filename":"resource:///modules/sessionstore/SessionStore.sys.mjs","lineNumber":2361,"stack":["resource:///modules/sessionstore/SessionStore.sys.mjs:ssi_onQuitApplicationGranted:2361","resource:///modules/sessionstore/SessionStore.sys.mjs:ssi_observe:1337","chrome://remote/content/shared/Browser.sys.mjs:quit:94","chrome://remote/content/marionette/driver.sys.mjs:GeckoDriver.prototype.quit:2954","chrome://remote/content/marionette/server.sys.mjs:despatch:318","chrome://remote/content/marionette/server.sys.mjs:execute:289","chrome://remote/content/marionette/server.sys.mjs:onPacket/<:262","chrome://remote/content/marionette/server.sys.mjs:onPacket:263","chrome://remote/content/marionette/transport.sys.mjs:_onJSONObjectReady/<:494"]}] Barrier: quit-application-granted
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+console.error: services.settings: 
+  security-state/onecrl Signature failed  Error: Shutdown, aborting read-only worker requests.
+console.error: services.settings: 
+  Message: Error: Shutdown, aborting read-only worker requests.
+  Stack:
+    _abortCancelableRequests@resource://services-settings/RemoteSettingsWorker.sys.mjs:131:19
+@resource://services-settings/RemoteSettingsWorker.sys.mjs:207:28
+trigger@resource://gre/modules/AsyncShutdown.sys.mjs:754:23
+_wait@resource://gre/modules/AsyncShutdown.sys.mjs:914:15
+wait@resource://gre/modules/AsyncShutdown.sys.mjs:895:34
+observe@resource://gre/modules/AsyncShutdown.sys.mjs:554:10
+
+console.warn: services.settings: main/search-config-v2 sync interrupted by shutdown
+console.error: (new Error("IndexedDB: main/ai-window-telemetry-prompts getLastModified() IndexedDB:  execute() The application is shutting down", "resource://services-settings/IDBHelpers.sys.mjs", 16))
+console.error: (new Error("SessionFile is closed", "resource:///modules/sessionstore/SessionFile.sys.mjs", 450))
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.error: (new RemoteSettingsWorkerError("Error: Can't import when we've started shutting down.", "resource://services-settings/RemoteSettingsWorker.sys.mjs", 34))
+1779729686216	geckodriver	INFO	Listening on 127.0.0.1:36489
+1779729687717	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "38921" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilePBxUur"
+*** You are running in headless mode.
+Exiting due to channel error.
+Exiting due to channel error.
+1779729690399	geckodriver	INFO	Listening on 127.0.0.1:48343
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779729690912	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "48447" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofile83e31e"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1779729694464	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+1779729697640	Marionette	INFO	Marionette enabled
+1779729708325	Marionette	INFO	Listening on port 39985
+Read port: 39985
+Read port: 39985
+Read port: 39985
+Read port: 39985
+WebDriver BiDi listening on ws://127.0.0.1:38921
+Read port: 39985
+Read port: 39985
+Read port: 39985
+Read port: 39985
+Read port: 39985
+Read port: 39985
+1779729721128	Marionette	INFO	Marionette enabled
+Read port: 39985
+1779729722820	Marionette	INFO	Listening on port 36243
+Read port: 36243
+WebDriver BiDi listening on ws://127.0.0.1:48447
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+Read port: 36243
+1779729753736	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+console.error: ({})
+Exiting due to channel error.
+Exiting due to channel error.
+1779729824103	geckodriver	INFO	Listening on 127.0.0.1:56421
+1779729825647	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "39491" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileW5rsfd"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779729841192	Marionette	INFO	Marionette enabled
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+[GFX1-]: CompositorBridgeChild receives IPC close with reason=AbnormalShutdown
+Exiting due to channel error.
+1779729873013	geckodriver	INFO	Listening on 127.0.0.1:45787
+1779729874249	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "39417" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileUSYgYw"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779729908666	Marionette	INFO	Marionette enabled
+1779729909085	Marionette	INFO	Listening on port 41859
+Read port: 41859
+WebDriver BiDi listening on ws://127.0.0.1:39417
+1779729910264	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1779729996195	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+DevTools listening on ws://127.0.0.1:39417/devtools/browser/73ff56e3-bec8-4008-9162-2c4bffc98b44
+1779730024973	geckodriver	INFO	Listening on 127.0.0.1:53591
+1779730025656	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "42461" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileLfUB30"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779730039363	Marionette	INFO	Marionette enabled
+1779730056547	Marionette	INFO	Listening on port 41813
+Read port: 41813
+Read port: 41813
+Read port: 41813
+Read port: 41813
+WebDriver BiDi listening on ws://127.0.0.1:42461
+Read port: 41813
+Read port: 41813
+1779730063728	Marionette	INFO	Stopped listening on port 41859
+1779730065145	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: services.settings: 
+  Message: NetworkError: Network error: TypeError: NetworkError: Network request failed
+  Stack:
+    APIError@resource://services-settings/RemoteSettingsClient.sys.mjs:107:1
+NetworkError@resource://services-settings/RemoteSettingsClient.sys.mjs:111:5
+_adjustedError@resource://services-settings/RemoteSettingsClient.sys.mjs:912:14
+maybeSync@resource://services-settings/RemoteSettingsClient.sys.mjs:817:38
+
+console.warn: services.settings: main/public-suffix-list sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/doh-config sync interrupted by shutdown
+console.warn: services.settings: main/translations-wasm sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/url-classifier-skip-urls sync interrupted by shutdown
+console.warn: services.settings: main/normandy-recipes-capabilities sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/cookie-banner-rules-list sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/search-config sync interrupted by shutdown
+console.warn: services.settings: main/search-config-overrides-v2 sync interrupted by shutdown
+console.warn: services.settings: main/search-config-overrides sync interrupted by shutdown
+console.warn: services.settings: main/query-stripping sync interrupted by shutdown
+console.warn: services.settings: main/addons-manager-settings sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/password-recipes sync interrupted by shutdown
+console.warn: services.settings: main/language-dictionaries sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/tippytop sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/pioneer-study-addons-v1 sync interrupted by shutdown
+console.warn: services.settings: main/hijack-blocklists sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/anti-tracking-url-decoration sync interrupted by shutdown
+console.warn: services.settings: main/sites-classification sync interrupted by shutdown
+console.error: (new NetworkError("Network error: TypeError: NetworkError: Network request failed", "resource://services-settings/RemoteSettingsClient.sys.mjs", 107))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: (new Error("SessionFile is closed", "resource:///modules/sessionstore/SessionFile.sys.mjs", 450))
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+1779730105590	geckodriver	INFO	Listening on 127.0.0.1:35225
+1779730106550	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "60391" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileioO90L"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779730113621	Marionette	INFO	Marionette enabled
+1779730114667	Marionette	INFO	Listening on port 40213
+Read port: 40213
+WebDriver BiDi listening on ws://127.0.0.1:60391
+Read port: 40213
+1779730121827	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1779730215701	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1779730300336	addons.xpi	ERROR	System addon update list error SyntaxError: XMLHttpRequest.open: 'http://%(server)s/dummy-system-addons.xml' is not a valid URL.
+console.warn: "unexpected engine url type." "visualSearch"
+DevTools listening on ws://127.0.0.1:42461/devtools/browser/cbdb098f-9b9f-4291-819d-87d23e1cb484
+DevTools listening on ws://127.0.0.1:60391/devtools/browser/5bbe6fdb-f4b8-4f85-9e90-5a6671425a02
+1779730446404	geckodriver	INFO	Listening on 127.0.0.1:45247
+1779730447873	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "52285" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileegT0Ke"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779730472379	Marionette	INFO	Stopped listening on port 41813
+1779730487901	Marionette	INFO	Stopped listening on port 40213
+1779730491991	Marionette	INFO	Marionette enabled
+1779730500537	Marionette	INFO	Listening on port 38991
+Read port: 38991
+Read port: 38991
+Read port: 38991
+WebDriver BiDi listening on ws://127.0.0.1:52285
+Read port: 38991
+Read port: 38991
+Read port: 38991
+Read port: 38991
+console.error: services.settings: 
+  Message: NetworkError: Network error: TypeError: NetworkError: Network request failed
+  Stack:
+    APIError@resource://services-settings/RemoteSettingsClient.sys.mjs:107:1
+NetworkError@resource://services-settings/RemoteSettingsClient.sys.mjs:111:5
+_adjustedError@resource://services-settings/RemoteSettingsClient.sys.mjs:912:14
+maybeSync@resource://services-settings/RemoteSettingsClient.sys.mjs:817:38
+
+console.warn: services.settings: main/query-stripping sync interrupted by shutdown
+console.warn: services.settings: main/addons-manager-settings sync interrupted by shutdown
+console.warn: services.settings: main/password-recipes sync interrupted by shutdown
+console.warn: services.settings: main/language-dictionaries sync interrupted by shutdown
+console.warn: services.settings: main/tippytop sync interrupted by shutdown
+console.warn: services.settings: main/pioneer-study-addons-v1 sync interrupted by shutdown
+console.warn: services.settings: main/hijack-blocklists sync interrupted by shutdown
+console.warn: services.settings: main/anti-tracking-url-decoration sync interrupted by shutdown
+console.warn: services.settings: main/sites-classification sync interrupted by shutdown
+console.error: (new NetworkError("Network error: TypeError: NetworkError: Network request failed", "resource://services-settings/RemoteSettingsClient.sys.mjs", 107))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+1779730537045	geckodriver	INFO	Listening on 127.0.0.1:49449
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+1779730539143	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "32855" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileWZPdiG"
+console.warn: services.settings: main/top-sites sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/translations-models sync interrupted by shutdown
+*** You are running in headless mode.
+console.warn: services.settings: main/public-suffix-list sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/doh-config sync interrupted by shutdown
+console.warn: services.settings: main/translations-wasm sync interrupted by shutdown
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/url-classifier-skip-urls sync interrupted by shutdown
+console.warn: services.settings: main/normandy-recipes-capabilities sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/cookie-banner-rules-list sync interrupted by shutdown
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.error: "Could not download new icon" (new TypeError("NetworkError: Network request failed", "resource://services-settings/Utils.sys.mjs", 236))
+console.warn: services.settings: main/search-config sync interrupted by shutdown
+console.warn: services.settings: main/search-config-overrides-v2 sync interrupted by shutdown
+console.warn: services.settings: main/search-config-overrides sync interrupted by shutdown
+console.warn: services.settings: main/query-stripping sync interrupted by shutdown
+console.warn: services.settings: main/addons-manager-settings sync interrupted by shutdown
+console.warn: services.settings: main/password-recipes sync interrupted by shutdown
+console.warn: services.settings: main/language-dictionaries sync interrupted by shutdown
+console.warn: services.settings: main/tippytop sync interrupted by shutdown
+console.warn: services.settings: main/pioneer-study-addons-v1 sync interrupted by shutdown
+console.warn: services.settings: main/hijack-blocklists sync interrupted by shutdown
+console.warn: services.settings: main/anti-tracking-url-decoration sync interrupted by shutdown
+console.warn: services.settings: main/sites-classification sync interrupted by shutdown
+1779730560396	Marionette	INFO	Marionette enabled
+1779730561809	geckodriver	INFO	Listening on 127.0.0.1:51091
+1779730562748	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "41109" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofile26C0dP"
+*** You are running in headless mode.
+1779730563582	Marionette	INFO	Listening on port 40221
+Read port: 40221
+WebDriver BiDi listening on ws://127.0.0.1:32855
+Read port: 40221
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+Read port: 40221
+Read port: 40221
+Read port: 40221
+Read port: 40221
+Read port: 40221
+Read port: 40221
+Read port: 40221
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+Read port: 40221
+1779730574056	Marionette	INFO	Marionette enabled
+console.error: ({})
+Read port: 40221
+1779730576155	Marionette	INFO	Listening on port 37337
+Read port: 37337
+WebDriver BiDi listening on ws://127.0.0.1:41109
+1779730577108	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+Read port: 37337
+Exiting due to channel error.
+Exiting due to channel error.
+1779730579936	geckodriver	INFO	Listening on 127.0.0.1:57925
+1779730580283	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "57785" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofilejmUa2I"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1779730582049	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1779730586248	Marionette	INFO	Marionette enabled
+1779730587064	Marionette	INFO	Listening on port 39955
+Read port: 39955
+WebDriver BiDi listening on ws://127.0.0.1:57785
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+Read port: 39955
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
