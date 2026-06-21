@@ -1,47 +1,89 @@
 #!/bin/bash
 
+set -e
+
 echo "======================================"
-echo " FireBounty v2 Installer"
+echo "   FireBounty v2 Installer"
 echo "======================================"
 
+echo "[*] Updating system..."
 sudo apt update
 
+echo "[*] Installing base packages..."
 sudo apt install -y \
-python3 \
-python3-pip \
-git \
-curl \
-wget \
-unzip \
-nmap \
-amass
+    python3 \
+    python3-pip \
+    git \
+    curl \
+    wget \
+    unzip \
+    nmap \
+    amass
 
-# Install Go if missing
+# ----------------------------------
+# Install Go
+# ----------------------------------
+
 if ! command -v go >/dev/null 2>&1
 then
-    echo "[*] Installing Go..."
 
-    wget https://go.dev/dl/go1.24.0.linux-amd64.tar.gz
+    echo "[*] Go not found. Installing Go..."
+
+    GO_VERSION="1.24.5"
+
+    wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz
 
     sudo rm -rf /usr/local/go
 
-    sudo tar -C /usr/local -xzf go1.24.0.linux-amd64.tar.gz
+    sudo tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz
 
-    export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+    rm go${GO_VERSION}.linux-amd64.tar.gz
 
+fi
+
+# ----------------------------------
+# Create GOPATH structure
+# ----------------------------------
+
+mkdir -p "$HOME/go/bin"
+
+# ----------------------------------
+# Fix PATH automatically
+# ----------------------------------
+
+if ! grep -q 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' ~/.zshrc 2>/dev/null
+then
     echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> ~/.zshrc
+fi
+
+if ! grep -q 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' ~/.bashrc 2>/dev/null
+then
     echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> ~/.bashrc
 fi
 
-# Python dependencies
+export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+
+echo ""
+echo "[*] Go Version:"
+go version
+
+# ----------------------------------
+# Python Requirements
+# ----------------------------------
+
 if [ -f requirements.txt ]
 then
+    echo ""
+    echo "[*] Installing Python requirements..."
     pip3 install -r requirements.txt
 fi
 
+# ----------------------------------
+# Install Recon Tools
+# ----------------------------------
+
 echo ""
-echo "[*] Installing FireBounty Recon Tools..."
-echo ""
+echo "[*] Installing FireBounty recon tools..."
 
 go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
 
@@ -59,37 +101,65 @@ go install github.com/lc/gau/v2/cmd/gau@latest
 
 go install github.com/tomnomnom/waybackurls@latest
 
+# ----------------------------------
+# Output Structure
+# ----------------------------------
+
 mkdir -p outputs/recon
 mkdir -p outputs/endpoints
 mkdir -p outputs/findings
 mkdir -p outputs/reports
 
+# ----------------------------------
+# Verification
+# ----------------------------------
+
 echo ""
 echo "======================================"
-echo " Installed Tools"
+echo " Installed Tools Verification"
 echo "======================================"
 
-for tool in \
-subfinder \
-assetfinder \
-httpx \
-dnsx \
-naabu \
-katana \
-gau \
-waybackurls \
-amass \
+TOOLS=(
+subfinder
+assetfinder
+httpx
+dnsx
+naabu
+katana
+gau
+waybackurls
+amass
 nmap
+)
+
+FAILED=0
+
+for tool in "${TOOLS[@]}"
 do
 
-    if command -v $tool >/dev/null 2>&1
+    if command -v "$tool" >/dev/null 2>&1
     then
         echo "[✓] $tool"
     else
         echo "[✗] $tool"
+        FAILED=1
     fi
 
 done
 
 echo ""
-echo "[🔥] FireBounty Installation Complete"
+
+if [ "$FAILED" -eq 1 ]
+then
+    echo "[!] Some tools failed installation."
+    echo "[!] Check install logs above."
+    exit 1
+fi
+
+echo "======================================"
+echo "[🔥] FireBounty Ready"
+echo "======================================"
+
+echo ""
+echo "Run:"
+echo "python3 firebounty.py recon example.com"
