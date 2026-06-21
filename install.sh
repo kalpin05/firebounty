@@ -1,33 +1,105 @@
 #!/bin/bash
 
-set -e
+# ======================================
+# FireBounty v2 Installer
+# ======================================
+
+INSTALLED_TOOLS=()
+FAILED_TOOLS=()
 
 echo "======================================"
-echo "   FireBounty v2 Installer"
+echo "      FireBounty v2 Installer"
 echo "======================================"
 
-echo "[*] Updating system..."
-sudo apt update
+# --------------------------------------
+# Update System
+# --------------------------------------
 
+echo ""
+echo "[*] Updating package lists..."
+
+if sudo apt update; then
+    echo "[✓] apt update successful"
+else
+    echo "[!] apt update failed"
+    echo "[!] Continuing installation..."
+fi
+
+# --------------------------------------
+# Base Packages
+# --------------------------------------
+
+echo ""
 echo "[*] Installing base packages..."
+
 sudo apt install -y \
     python3 \
-    python3-pip \
     git \
     curl \
     wget \
     unzip \
     nmap \
-    amass
+    amass || true
 
-# ----------------------------------
+# --------------------------------------
+# Verify Python
+# --------------------------------------
+
+echo ""
+echo "[*] Checking Python..."
+
+if ! command -v python3 >/dev/null 2>&1
+then
+    echo "[✗] Python3 not found"
+    exit 1
+fi
+
+echo "[✓] Python Found"
+
+# --------------------------------------
+# Ensure Pip
+# --------------------------------------
+
+echo ""
+echo "[*] Checking pip..."
+
+python3 -m ensurepip --default-pip >/dev/null 2>&1 || true
+
+if python3 -m pip --version >/dev/null 2>&1
+then
+    echo "[✓] pip available"
+else
+    echo "[!] pip unavailable"
+    echo "[!] Skipping Python package installation"
+fi
+
+# --------------------------------------
+# Install Python Requirements
+# --------------------------------------
+
+if [ -f requirements.txt ]
+then
+
+    echo ""
+    echo "[*] Installing Python requirements..."
+
+    python3 -m pip install --upgrade pip
+
+    python3 -m pip install -r requirements.txt
+
+fi
+
+# --------------------------------------
 # Install Go
-# ----------------------------------
+# --------------------------------------
+
+echo ""
+echo "[*] Checking Go..."
 
 if ! command -v go >/dev/null 2>&1
 then
 
-    echo "[*] Go not found. Installing Go..."
+    echo "[*] Installing Go..."
 
     GO_VERSION="1.24.5"
 
@@ -41,15 +113,11 @@ then
 
 fi
 
-# ----------------------------------
-# Create GOPATH structure
-# ----------------------------------
+# --------------------------------------
+# Configure PATH
+# --------------------------------------
 
 mkdir -p "$HOME/go/bin"
-
-# ----------------------------------
-# Fix PATH automatically
-# ----------------------------------
 
 if ! grep -q 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' ~/.zshrc 2>/dev/null
 then
@@ -64,79 +132,91 @@ fi
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 
 echo ""
-echo "[*] Go Version:"
+echo "[✓] Go Version:"
 go version
 
-# ----------------------------------
-# Python Requirements
-# ----------------------------------
+# --------------------------------------
+# Function
+# --------------------------------------
 
-# ----------------------------------
-# Ensure pip exists
-# ----------------------------------
+install_go_tool() {
 
-if ! command -v pip3 >/dev/null 2>&1
-then
-    echo "[*] pip3 not found. Installing..."
+    TOOL_NAME=$1
+    TOOL_PATH=$2
 
-    sudo apt install -y python3-pip
-
-    if ! command -v pip3 >/dev/null 2>&1
-    then
-        echo "[!] Failed to install pip3"
-        exit 1
-    fi
-fi
-
-# ----------------------------------
-# Python Requirements
-# ----------------------------------
-
-if [ -f requirements.txt ]
-then
     echo ""
-    echo "[*] Installing Python requirements..."
+    echo "[*] Installing $TOOL_NAME"
 
-    python3 -m pip install --upgrade pip
+    if go install "${TOOL_PATH}@latest"
+    then
 
-    python3 -m pip install -r requirements.txt
-fi
+        echo "[✓] $TOOL_NAME installed"
 
-# ----------------------------------
-# Install Recon Tools
-# ----------------------------------
+        INSTALLED_TOOLS+=("$TOOL_NAME")
+
+    else
+
+        echo "[✗] $TOOL_NAME failed"
+
+        FAILED_TOOLS+=("$TOOL_NAME")
+
+    fi
+}
+
+# --------------------------------------
+# Recon Tools
+# --------------------------------------
 
 echo ""
-echo "[*] Installing FireBounty recon tools..."
+echo "[*] Installing FireBounty Recon Tools..."
 
-go install github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+install_go_tool \
+"subfinder" \
+"github.com/projectdiscovery/subfinder/v2/cmd/subfinder"
 
-go install github.com/tomnomnom/assetfinder@latest
+install_go_tool \
+"assetfinder" \
+"github.com/tomnomnom/assetfinder"
 
-go install github.com/projectdiscovery/httpx/cmd/httpx@latest
+install_go_tool \
+"httpx" \
+"github.com/projectdiscovery/httpx/cmd/httpx"
 
-go install github.com/projectdiscovery/dnsx/cmd/dnsx@latest
+install_go_tool \
+"dnsx" \
+"github.com/projectdiscovery/dnsx/cmd/dnsx"
 
-go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+install_go_tool \
+"naabu" \
+"github.com/projectdiscovery/naabu/v2/cmd/naabu"
 
-go install github.com/projectdiscovery/katana/cmd/katana@latest
+install_go_tool \
+"katana" \
+"github.com/projectdiscovery/katana/cmd/katana"
 
-go install github.com/lc/gau/v2/cmd/gau@latest
+install_go_tool \
+"gau" \
+"github.com/lc/gau/v2/cmd/gau"
 
-go install github.com/tomnomnom/waybackurls@latest
+install_go_tool \
+"waybackurls" \
+"github.com/tomnomnom/waybackurls"
 
-# ----------------------------------
+# --------------------------------------
 # Output Structure
-# ----------------------------------
+# --------------------------------------
+
+echo ""
+echo "[*] Creating FireBounty folders..."
 
 mkdir -p outputs/recon
 mkdir -p outputs/endpoints
 mkdir -p outputs/findings
 mkdir -p outputs/reports
 
-# ----------------------------------
+# --------------------------------------
 # Verification
-# ----------------------------------
+# --------------------------------------
 
 echo ""
 echo "======================================"
@@ -156,8 +236,6 @@ amass
 nmap
 )
 
-FAILED=0
-
 for tool in "${TOOLS[@]}"
 do
 
@@ -166,24 +244,50 @@ do
         echo "[✓] $tool"
     else
         echo "[✗] $tool"
-        FAILED=1
     fi
 
 done
 
+# --------------------------------------
+# Summary
+# --------------------------------------
+
+echo ""
+echo "======================================"
+echo " FireBounty Installation Summary"
+echo "======================================"
+
+echo ""
+echo "[✓] Installed Tools"
+
+for tool in "${INSTALLED_TOOLS[@]}"
+do
+    echo "    $tool"
+done
+
 echo ""
 
-if [ "$FAILED" -eq 1 ]
+if [ ${#FAILED_TOOLS[@]} -gt 0 ]
 then
-    echo "[!] Some tools failed installation."
-    echo "[!] Check install logs above."
-    exit 1
+
+    echo "[!] Failed Tools"
+
+    for tool in "${FAILED_TOOLS[@]}"
+    do
+        echo "    $tool"
+    done
+
+else
+
+    echo "[✓] No installation failures"
+
 fi
 
+echo ""
 echo "======================================"
 echo "[🔥] FireBounty Ready"
 echo "======================================"
 
 echo ""
-echo "Run:"
+echo "Usage:"
 echo "python3 firebounty.py recon example.com"

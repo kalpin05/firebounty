@@ -1,6 +1,6 @@
-requests
-aiohttp
-argparse
-colorama
-tqdm
-python-nmap
+requests>=2.32.0
+aiohttp>=3.10.0
+colorama>=0.4.6
+tqdm>=4.66.0
+python-nmap>=0.7.1
+PyYAML>=6.0
