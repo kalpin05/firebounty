@@ -1,77 +1,120 @@
+import os
 import subprocess
 import threading
 import requests
-import os
 
 
-OUTPUT_DIR = "outputs/recon"
+def create_folders(target):
+
+    base = f"outputs/{target}"
+
+    recon = f"{base}/recon"
+    endpoints = f"{base}/endpoints"
+    findings = f"{base}/findings"
+    reports = f"{base}/reports"
+
+    os.makedirs(recon, exist_ok=True)
+    os.makedirs(endpoints, exist_ok=True)
+    os.makedirs(findings, exist_ok=True)
+    os.makedirs(reports, exist_ok=True)
+
+    return recon
 
 
-def save_results(filename, data):
+def save_file(path, data):
 
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-    with open(f"{OUTPUT_DIR}/{filename}", "w") as f:
+    with open(path, "w") as f:
 
         for item in sorted(set(data)):
             f.write(item + "\n")
 
 
-def run_subfinder(domain, results):
+# ----------------------------------
+# Subfinder
+# ----------------------------------
+
+def run_subfinder(domain, output):
 
     try:
 
-        output = subprocess.check_output(
-            ["subfinder", "-silent", "-d", domain],
+        result = subprocess.check_output(
+            [
+                "subfinder",
+                "-silent",
+                "-d",
+                domain
+            ],
             text=True
         )
 
-        results.extend(output.splitlines())
+        output.extend(result.splitlines())
 
     except Exception as e:
 
         print(f"[!] Subfinder error: {e}")
 
 
-def run_amass(domain, results):
+# ----------------------------------
+# Amass
+# ----------------------------------
+
+def run_amass(domain, output):
 
     try:
 
-        output = subprocess.check_output(
-            ["amass", "enum", "-passive", "-d", domain],
+        result = subprocess.check_output(
+            [
+                "amass",
+                "enum",
+                "-passive",
+                "-d",
+                domain
+            ],
             text=True
         )
 
-        results.extend(output.splitlines())
+        output.extend(result.splitlines())
 
     except Exception as e:
 
         print(f"[!] Amass error: {e}")
 
 
-def run_assetfinder(domain, results):
+# ----------------------------------
+# Assetfinder
+# ----------------------------------
+
+def run_assetfinder(domain, output):
 
     try:
 
-        output = subprocess.check_output(
-            ["assetfinder", "--subs-only", domain],
+        result = subprocess.check_output(
+            [
+                "assetfinder",
+                "--subs-only",
+                domain
+            ],
             text=True
         )
 
-        results.extend(output.splitlines())
+        output.extend(result.splitlines())
 
     except Exception as e:
 
         print(f"[!] Assetfinder error: {e}")
 
 
-def run_crtsh(domain, results):
+# ----------------------------------
+# crt.sh
+# ----------------------------------
+
+def run_crtsh(domain, output):
 
     try:
 
         url = f"https://crt.sh/?q=%.{domain}&output=json"
 
-        r = requests.get(url, timeout=20)
+        r = requests.get(url, timeout=30)
 
         data = r.json()
 
@@ -81,14 +124,18 @@ def run_crtsh(domain, results):
 
             for sub in name.split("\n"):
 
-                results.append(sub.strip())
+                output.append(sub.strip())
 
     except Exception as e:
 
         print(f"[!] crt.sh error: {e}")
 
 
-def check_alive():
+# ----------------------------------
+# Alive Check
+# ----------------------------------
+
+def run_httpx(recon_dir):
 
     try:
 
@@ -97,9 +144,9 @@ def check_alive():
                 "httpx",
                 "-silent",
                 "-l",
-                f"{OUTPUT_DIR}/all_subdomains.txt",
+                f"{recon_dir}/all_subdomains.txt",
                 "-o",
-                f"{OUTPUT_DIR}/alive.txt"
+                f"{recon_dir}/alive.txt"
             ]
         )
 
@@ -108,9 +155,39 @@ def check_alive():
         print(f"[!] HTTPX error: {e}")
 
 
+# ----------------------------------
+# Port Scan
+# ----------------------------------
+
+def run_naabu(recon_dir):
+
+    try:
+
+        subprocess.run(
+            [
+                "naabu",
+                "-silent",
+                "-list",
+                f"{recon_dir}/alive.txt",
+                "-o",
+                f"{recon_dir}/ports.txt"
+            ]
+        )
+
+    except Exception as e:
+
+        print(f"[!] Naabu error: {e}")
+
+
+# ----------------------------------
+# Main
+# ----------------------------------
+
 def run(domain):
 
-    print("\n[+] Starting Recon Engine\n")
+    print("\n[🔥] FireBounty Recon Engine\n")
+
+    recon_dir = create_folders(domain)
 
     subfinder_results = []
     amass_results = []
@@ -138,7 +215,10 @@ def run(domain):
             target=run_crtsh,
             args=(domain, crtsh_results)
         )
+
     ]
+
+    print("[*] Starting sources")
 
     for t in threads:
         t.start()
@@ -146,23 +226,23 @@ def run(domain):
     for t in threads:
         t.join()
 
-    save_results(
-        "subfinder.txt",
+    save_file(
+        f"{recon_dir}/subfinder.txt",
         subfinder_results
     )
 
-    save_results(
-        "amass.txt",
+    save_file(
+        f"{recon_dir}/amass.txt",
         amass_results
     )
 
-    save_results(
-        "assetfinder.txt",
+    save_file(
+        f"{recon_dir}/assetfinder.txt",
         assetfinder_results
     )
 
-    save_results(
-        "crtsh.txt",
+    save_file(
+        f"{recon_dir}/crtsh.txt",
         crtsh_results
     )
 
@@ -175,24 +255,28 @@ def run(domain):
 
     all_subs = {
 
-        s.strip()
-        for s in all_subs
-        if s.strip()
+        x.strip()
+        for x in all_subs
+        if x.strip()
     }
 
-    save_results(
-        "all_subdomains.txt",
+    save_file(
+        f"{recon_dir}/all_subdomains.txt",
         all_subs
     )
 
     print(
-        f"[+] Total Unique Subdomains: {len(all_subs)}"
+        f"[+] Unique Subdomains: {len(all_subs)}"
     )
 
-    print("[+] Running HTTPX")
+    print("[*] Running HTTPX")
 
-    check_alive()
+    run_httpx(recon_dir)
 
-    print(
-        "[+] Results saved in outputs/recon/"
-    )
+    print("[*] Running Naabu")
+
+    run_naabu(recon_dir)
+
+    print("")
+    print("[✓] Recon Complete")
+    print(f"[✓] Results -> {recon_dir}")
