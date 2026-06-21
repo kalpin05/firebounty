@@ -1,7 +1,6 @@
-import os
+from core.recon_engine import run as recon_run
+
 
 def run(target):
 
-    print("[*] Running subdomain discovery")
-
-    os.system(f"subfinder -d {target} -silent")
+    recon_run(target)

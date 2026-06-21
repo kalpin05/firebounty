@@ -1,7 +1,8 @@
-import os
+from modules import subdomain
+
 
 def run(target):
 
     print("[*] Running recon")
 
-    os.system(f"subfinder -d {target}")
+    subdomain.run(target)
