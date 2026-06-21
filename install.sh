@@ -71,11 +71,35 @@ go version
 # Python Requirements
 # ----------------------------------
 
+# ----------------------------------
+# Ensure pip exists
+# ----------------------------------
+
+if ! command -v pip3 >/dev/null 2>&1
+then
+    echo "[*] pip3 not found. Installing..."
+
+    sudo apt install -y python3-pip
+
+    if ! command -v pip3 >/dev/null 2>&1
+    then
+        echo "[!] Failed to install pip3"
+        exit 1
+    fi
+fi
+
+# ----------------------------------
+# Python Requirements
+# ----------------------------------
+
 if [ -f requirements.txt ]
 then
     echo ""
     echo "[*] Installing Python requirements..."
-    pip3 install -r requirements.txt
+
+    python3 -m pip install --upgrade pip
+
+    python3 -m pip install -r requirements.txt
 fi
 
 # ----------------------------------
