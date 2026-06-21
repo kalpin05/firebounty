@@ -1,7 +1,14 @@
-from utils.logger import save
+from datetime import datetime
 
-save(url)
-def save(url):
+LOGFILE = "outputs/firebounty.log"
 
-    with open("reports.txt", "a") as f:
-        f.write(url + "\n")
+def log(message):
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    line = f"[{timestamp}] {message}"
+
+    print(line)
+
+    with open(LOGFILE, "a") as f:
+        f.write(line + "\n")

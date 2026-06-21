@@ -2,6 +2,8 @@ import argparse
 from modules import param_mutator
 from modules import combo_fuzzer
 from modules import recon
+from core.toolcheck import check_tools
+from core.output_manager import create_output_dirs
 from modules import wafdetect
 from modules import waf_bypass
 from modules import portscan
@@ -16,7 +18,9 @@ from modules import jwt_attack
 from modules import race
 
 def main():
+    create_output_dirs()
 
+    check_tools()
     parser = argparse.ArgumentParser(
         description="FireBounty - Bug Bounty & WAF Testing CLI"
     )

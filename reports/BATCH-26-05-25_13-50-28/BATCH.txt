@@ -1,0 +1,7 @@
+# Dirsearch started Mon May 25 14:33:49 2026 as: /usr/lib/python3/dist-packages/dirsearch/dirsearch.py -l openailive.txt -e 200,404-e php,html,asp,aspx
+
+302   143B   http://accounts.openai.com/phone    -> REDIRECTS TO: https://help.openai.com/en/articles/11391933
+302   143B   http://beta.openai.com/phone    -> REDIRECTS TO: https://help.openai.com/en/articles/11391933
+530     8KB  http://human-data.forum.openai.com/.well-known/acme-challenge/dtfy
+302   143B   http://human-data.forum.openai.com/phone    -> REDIRECTS TO: https://help.openai.com/en/articles/11391933
+522     7KB  http://images.openai.com/.well-known/acme-challenge/dtfy

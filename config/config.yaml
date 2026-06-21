@@ -1,0 +1,16 @@
+general:
+  timeout: 10
+  threads: 50
+
+subdomain:
+  subfinder: true
+  amass: true
+  assetfinder: true
+  oneforall: true
+
+httpx:
+  threads: 100
+
+logging:
+  enabled: true
+  level: INFO
