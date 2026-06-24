@@ -4,6 +4,53 @@ import threading
 import requests
 
 
+# ----------------------------------
+# Tool Resolver
+# ----------------------------------
+
+def get_tool(tool_name):
+
+    candidates = [
+
+        f"{os.path.expanduser('~')}/go/bin/{tool_name}",
+
+        f"/root/go/bin/{tool_name}",
+
+        tool_name
+
+    ]
+
+    for tool in candidates:
+
+        try:
+
+            subprocess.run(
+                [tool, "-h"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+
+            return tool
+
+        except:
+            pass
+
+    return tool_name
+
+
+SUBFINDER = get_tool("subfinder")
+ASSETFINDER = get_tool("assetfinder")
+HTTPX = get_tool("httpx")
+NAABU = get_tool("naabu")
+
+# We will temporarily skip Amass if broken
+AMASS = get_tool("amass")
+
+
+# ----------------------------------
+# Folder Creation
+# ----------------------------------
+
 def create_folders(target):
 
     base = f"outputs/{target}"
@@ -21,12 +68,19 @@ def create_folders(target):
     return recon
 
 
+# ----------------------------------
+# Save File
+# ----------------------------------
+
 def save_file(path, data):
 
     with open(path, "w") as f:
 
         for item in sorted(set(data)):
-            f.write(item + "\n")
+
+            if item.strip():
+
+                f.write(item.strip() + "\n")
 
 
 # ----------------------------------
@@ -39,7 +93,7 @@ def run_subfinder(domain, output):
 
         result = subprocess.check_output(
             [
-                "subfinder",
+                SUBFINDER,
                 "-silent",
                 "-d",
                 domain
@@ -64,7 +118,7 @@ def run_amass(domain, output):
 
         result = subprocess.check_output(
             [
-                "amass",
+                AMASS,
                 "enum",
                 "-passive",
                 "-d",
@@ -75,9 +129,9 @@ def run_amass(domain, output):
 
         output.extend(result.splitlines())
 
-    except Exception as e:
+    except Exception:
 
-        print(f"[!] Amass error: {e}")
+        print("[!] Amass unavailable - skipping")
 
 
 # ----------------------------------
@@ -90,7 +144,7 @@ def run_assetfinder(domain, output):
 
         result = subprocess.check_output(
             [
-                "assetfinder",
+                ASSETFINDER,
                 "--subs-only",
                 domain
             ],
@@ -114,17 +168,27 @@ def run_crtsh(domain, output):
 
         url = f"https://crt.sh/?q=%.{domain}&output=json"
 
-        r = requests.get(url, timeout=30)
+        r = requests.get(
+            url,
+            timeout=20
+        )
 
         data = r.json()
 
         for item in data:
 
-            name = item.get("name_value", "")
+            name = item.get(
+                "name_value",
+                ""
+            )
 
             for sub in name.split("\n"):
 
-                output.append(sub.strip())
+                sub = sub.strip()
+
+                if sub:
+
+                    output.append(sub)
 
     except Exception as e:
 
@@ -132,22 +196,34 @@ def run_crtsh(domain, output):
 
 
 # ----------------------------------
-# Alive Check
+# HTTPX
 # ----------------------------------
 
 def run_httpx(recon_dir):
+
+    input_file = f"{recon_dir}/all_subdomains.txt"
+
+    output_file = f"{recon_dir}/alive.txt"
+
+    if not os.path.exists(input_file):
+
+        print("[!] all_subdomains.txt missing")
+
+        return
 
     try:
 
         subprocess.run(
             [
-                "httpx",
+                HTTPX,
                 "-silent",
                 "-l",
-                f"{recon_dir}/all_subdomains.txt",
+                input_file,
                 "-o",
-                f"{recon_dir}/alive.txt"
-            ]
+                output_file
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
         )
 
     except Exception as e:
@@ -156,22 +232,34 @@ def run_httpx(recon_dir):
 
 
 # ----------------------------------
-# Port Scan
+# Naabu
 # ----------------------------------
 
 def run_naabu(recon_dir):
+
+    alive_file = f"{recon_dir}/alive.txt"
+
+    output_file = f"{recon_dir}/ports.txt"
+
+    if not os.path.exists(alive_file):
+
+        print("[!] alive.txt missing")
+
+        return
 
     try:
 
         subprocess.run(
             [
-                "naabu",
+                NAABU,
                 "-silent",
                 "-list",
-                f"{recon_dir}/alive.txt",
+                alive_file,
                 "-o",
-                f"{recon_dir}/ports.txt"
-            ]
+                output_file
+            ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
         )
 
     except Exception as e:
@@ -265,9 +353,7 @@ def run(domain):
         all_subs
     )
 
-    print(
-        f"[+] Unique Subdomains: {len(all_subs)}"
-    )
+    print(f"[+] Unique Subdomains: {len(all_subs)}")
 
     print("[*] Running HTTPX")
 
@@ -277,6 +363,24 @@ def run(domain):
 
     run_naabu(recon_dir)
 
-    print("")
-    print("[✓] Recon Complete")
+    alive_file = f"{recon_dir}/alive.txt"
+    ports_file = f"{recon_dir}/ports.txt"
+
+    alive_count = 0
+    ports_count = 0
+
+    if os.path.exists(alive_file):
+
+        with open(alive_file) as f:
+            alive_count = len(f.readlines())
+
+    if os.path.exists(ports_file):
+
+        with open(ports_file) as f:
+            ports_count = len(f.readlines())
+
+    print(f"[+] Alive Hosts: {alive_count}")
+    print(f"[+] Open Ports: {ports_count}")
+
+    print("\n[✓] Recon Complete")
     print(f"[✓] Results -> {recon_dir}")
