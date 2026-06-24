@@ -6,6 +6,22 @@ def run(target):
 
     print("[*] Running recon")
 
-    subdomain.run(target)
+    try:
 
-    endpoint_run(target)
+        subdomain.run(target)
+
+    except Exception as e:
+
+        print(f"[!] Recon Engine Error: {e}")
+
+        return
+
+    try:
+
+        endpoint_run(target)
+
+    except Exception as e:
+
+        print(f"[!] Endpoint Engine Error: {e}")
+
+    print("[✓] Recon Module Finished")
