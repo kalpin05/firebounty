@@ -38,8 +38,7 @@ sudo apt install -y \
     curl \
     wget \
     unzip \
-    nmap \
-    amass || true
+    nmap || true
 
 # --------------------------------------
 # Verify Python
@@ -199,9 +198,8 @@ install_go_tool \
 "github.com/lc/gau/v2/cmd/gau"
 
 install_go_tool \
-"waybackurls" \
-"github.com/tomnomnom/waybackurls"
-
+"amass" \
+"github.com/owasp-amass/amass/v4/..."
 # --------------------------------------
 # Output Structure
 # --------------------------------------
@@ -209,10 +207,7 @@ install_go_tool \
 echo ""
 echo "[*] Creating FireBounty folders..."
 
-mkdir -p outputs/recon
-mkdir -p outputs/endpoints
-mkdir -p outputs/findings
-mkdir -p outputs/reports
+
 
 # --------------------------------------
 # Verification
@@ -239,12 +234,15 @@ nmap
 for tool in "${TOOLS[@]}"
 do
 
-    if command -v "$tool" >/dev/null 2>&1
-    then
-        echo "[✓] $tool"
-    else
-        echo "[✗] $tool"
-    fi
+   if [ -f "$HOME/go/bin/$tool" ]
+then
+    echo "[✓] $tool (Go)"
+elif command -v "$tool" >/dev/null 2>&1
+then
+    echo "[✓] $tool (System)"
+else
+    echo "[✗] $tool"
+fi
 
 done
 
