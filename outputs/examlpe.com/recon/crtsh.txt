@@ -1,0 +1,3 @@
+*.examlpe.com
+examlpe.com
+www.examlpe.com

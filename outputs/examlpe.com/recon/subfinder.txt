@@ -1,0 +1,10 @@
+erp.examlpe.com
+hello.examlpe.com
+mail.examlpe.com
+oszone301.examlpe.com
+pve19.examlpe.com
+pve62.examlpe.com
+pve64.examlpe.com
+server.examlpe.com
+stats.examlpe.com
+www.examlpe.com
