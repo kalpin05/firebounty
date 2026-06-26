@@ -1,0 +1,2 @@
+example.com (FQDN) --> ns_record --> elliott.ns.cloudflare.com (FQDN)
+example.com (FQDN) --> ns_record --> hera.ns.cloudflare.com (FQDN)
