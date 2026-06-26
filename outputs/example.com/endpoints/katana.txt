@@ -1,2 +1,0 @@
-http://subjectname@example.com
-https://user@example.com
