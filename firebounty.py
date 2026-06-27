@@ -1,4 +1,5 @@
 import argparse
+from modules import technology
 from modules import param_mutator
 from modules import combo_fuzzer
 from modules import recon
@@ -44,6 +45,10 @@ def main():
 
     elif args.mode == "waf":
         wafdetect.run(args.target)
+
+    elif args.mode == "technology":
+
+        technology.run(args.target)
 
     elif args.mode == "bypass":
         waf_bypass.run(args.target)
@@ -96,6 +101,7 @@ def main():
         param_finder.run(args.target)
         api_fuzzer.run(args.target)
         idor.run(args.target)
+        technology.run(args.target)
 
         print("\n[✅] Scan Completed\n")
 
