@@ -1,386 +1,147 @@
+
+"""
+FireBounty v2 - Stable Recon Engine (Sprint 2.5)
+Drop-in replacement for core/recon_engine.py
+"""
+
 import os
+import json
+import shutil
 import subprocess
-import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 
+TIMEOUT = 120
 
-# ----------------------------------
-# Tool Resolver
-# ----------------------------------
-
-def get_tool(tool_name):
-
-    candidates = [
-
-        f"{os.path.expanduser('~')}/go/bin/{tool_name}",
-
-        f"/root/go/bin/{tool_name}",
-
-        tool_name
-
-    ]
-
-    for tool in candidates:
-
-        try:
-
-            subprocess.run(
-                [tool, "-h"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
-            )
-
-            return tool
-
-        except:
-            pass
-
-    return tool_name
+TOOLS = {
+    "subfinder": ["subfinder","-silent","-d","{domain}"],
+    "assetfinder": ["assetfinder","--subs-only","{domain}"],
+    "amass": ["amass","enum","-passive","-d","{domain}"],
+    "httpx": ["httpx","-silent","-l","{input}","-o","{output}"],
+    "naabu": ["naabu","-silent","-list","{input}","-o","{output}"]
+}
 
 
-SUBFINDER = get_tool("subfinder")
-ASSETFINDER = get_tool("assetfinder")
-HTTPX = get_tool("httpx")
-NAABU = get_tool("naabu")
-
-# We will temporarily skip Amass if broken
-AMASS = get_tool("amass")
-
-
-# ----------------------------------
-# Folder Creation
-# ----------------------------------
-
-def create_folders(target):
-
-    base = f"outputs/{target}"
-
-    recon = f"{base}/recon"
-    endpoints = f"{base}/endpoints"
-    findings = f"{base}/findings"
-    reports = f"{base}/reports"
-
-    os.makedirs(recon, exist_ok=True)
-    os.makedirs(endpoints, exist_ok=True)
-    os.makedirs(findings, exist_ok=True)
-    os.makedirs(reports, exist_ok=True)
-
-    return recon
+def resolve_tool(name):
+    for c in (
+        shutil.which(name),
+        os.path.expanduser(f"~/go/bin/{name}"),
+        f"/root/go/bin/{name}",
+    ):
+        if c and os.path.exists(c):
+            return c
+    return name
 
 
-# ----------------------------------
-# Save File
-# ----------------------------------
-
-def save_file(path, data):
-
-    with open(path, "w") as f:
-
-        for item in sorted(set(data)):
-
-            if item.strip():
-
-                f.write(item.strip() + "\n")
-
-
-# ----------------------------------
-# Subfinder
-# ----------------------------------
-
-def run_subfinder(domain, output):
-
+def run_cmd(cmd, timeout=TIMEOUT):
     try:
-
-        result = subprocess.check_output(
-            [
-                SUBFINDER,
-                "-silent",
-                "-d",
-                domain
-            ],
-            text=True
+        r = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=timeout
         )
-
-        output.extend(result.splitlines())
-
+        return r.returncode == 0, r.stdout
+    except subprocess.TimeoutExpired:
+        print(f"[!] Timeout: {' '.join(cmd)}")
     except Exception as e:
+        print(f"[!] Command error: {e}")
+    return False, ""
 
-        print(f"[!] Subfinder error: {e}")
+
+def save(path, data):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        for x in sorted(set(filter(None, map(str.strip, data)))):
+            f.write(x + "\n")
 
 
-# ----------------------------------
-# Amass
-# ----------------------------------
-
-def run_amass(domain, output):
-
+def fetch_crtsh(domain):
+    url = f"https://crt.sh/?q=%.{domain}&output=json"
     try:
-
-        result = subprocess.check_output(
-            [
-                AMASS,
-                "enum",
-                "-passive",
-                "-d",
-                domain
-            ],
-            text=True
-        )
-
-        output.extend(result.splitlines())
-
-    except Exception:
-
-        print("[!] Amass unavailable - skipping")
-
-
-# ----------------------------------
-# Assetfinder
-# ----------------------------------
-
-def run_assetfinder(domain, output):
-
-    try:
-
-        result = subprocess.check_output(
-            [
-                ASSETFINDER,
-                "--subs-only",
-                domain
-            ],
-            text=True
-        )
-
-        output.extend(result.splitlines())
-
-    except Exception as e:
-
-        print(f"[!] Assetfinder error: {e}")
-
-
-# ----------------------------------
-# crt.sh
-# ----------------------------------
-
-def run_crtsh(domain, output):
-
-    try:
-
-        url = f"https://crt.sh/?q=%.{domain}&output=json"
-
         r = requests.get(
             url,
-            timeout=20
+            timeout=20,
+            headers={"User-Agent":"FireBounty/2.0"}
         )
-
+        if r.status_code != 200:
+            return []
+        if "json" not in r.headers.get("Content-Type",""):
+            return []
         data = r.json()
-
-        for item in data:
-
-            name = item.get(
-                "name_value",
-                ""
-            )
-
-            for sub in name.split("\n"):
-
-                sub = sub.strip()
-
-                if sub:
-
-                    output.append(sub)
-
-    except Exception as e:
-
-        print(f"[!] crt.sh error: {e}")
+        out = []
+        for row in data:
+            for s in row.get("name_value","").splitlines():
+                s = s.strip()
+                if s:
+                    out.append(s)
+        return out
+    except Exception:
+        return []
 
 
-# ----------------------------------
-# HTTPX
-# ----------------------------------
+def recon_source(tool, domain):
+    exe = resolve_tool(tool)
+    ok, out = run_cmd(
+        [x.format(domain=domain) for x in TOOLS[tool]]
+        if exe == tool else
+        [exe] + [x.format(domain=domain) for x in TOOLS[tool][1:]]
+    )
+    return out.splitlines() if ok else []
 
-def run_httpx(recon_dir):
-
-    input_file = f"{recon_dir}/all_subdomains.txt"
-
-    output_file = f"{recon_dir}/alive.txt"
-
-    if not os.path.exists(input_file):
-
-        print("[!] all_subdomains.txt missing")
-
-        return
-
-    try:
-
-        subprocess.run(
-            [
-                HTTPX,
-                "-silent",
-                "-l",
-                input_file,
-                "-o",
-                output_file
-            ],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
-
-    except Exception as e:
-
-        print(f"[!] HTTPX error: {e}")
-
-
-# ----------------------------------
-# Naabu
-# ----------------------------------
-
-def run_naabu(recon_dir):
-
-    alive_file = f"{recon_dir}/alive.txt"
-
-    output_file = f"{recon_dir}/ports.txt"
-
-    if not os.path.exists(alive_file):
-
-        print("[!] alive.txt missing")
-
-        return
-
-    try:
-
-        subprocess.run(
-            [
-                NAABU,
-                "-silent",
-                "-list",
-                alive_file,
-                "-o",
-                output_file
-            ],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
-
-    except Exception as e:
-
-        print(f"[!] Naabu error: {e}")
-
-
-# ----------------------------------
-# Main
-# ----------------------------------
 
 def run(domain):
+    base = os.path.join("outputs", domain, "recon")
+    os.makedirs(base, exist_ok=True)
 
-    print("\n[🔥] FireBounty Recon Engine\n")
+    futures = {}
+    results = {}
 
-    recon_dir = create_folders(domain)
+    print("[*] Starting Recon")
 
-    subfinder_results = []
-    amass_results = []
-    assetfinder_results = []
-    crtsh_results = []
+    with ThreadPoolExecutor(max_workers=4) as ex:
+        for t in ("subfinder","assetfinder","amass"):
+            futures[ex.submit(recon_source,t,domain)] = t
+        futures[ex.submit(fetch_crtsh,domain)] = "crtsh"
 
-    threads = [
+        for f in as_completed(futures):
+            name = futures[f]
+            try:
+                results[name] = f.result()
+                save(os.path.join(base,f"{name}.txt"), results[name])
+                print(f"[+] {name}: {len(results[name])}")
+            except Exception as e:
+                print(f"[!] {name}: {e}")
+                results[name] = []
 
-        threading.Thread(
-            target=run_subfinder,
-            args=(domain, subfinder_results)
-        ),
+    subs = set()
+    for v in results.values():
+        subs.update(v)
 
-        threading.Thread(
-            target=run_amass,
-            args=(domain, amass_results)
-        ),
+    save(os.path.join(base,"all_subdomains.txt"), subs)
 
-        threading.Thread(
-            target=run_assetfinder,
-            args=(domain, assetfinder_results)
-        ),
+    all_file = os.path.join(base,"all_subdomains.txt")
+    alive = os.path.join(base,"alive.txt")
+    ports = os.path.join(base,"ports.txt")
 
-        threading.Thread(
-            target=run_crtsh,
-            args=(domain, crtsh_results)
-        )
+    httpx = resolve_tool("httpx")
+    if os.path.exists(all_file):
+        run_cmd([httpx,"-silent","-l",all_file,"-o",alive],180)
 
-    ]
+    naabu = resolve_tool("naabu")
+    if os.path.exists(alive) and os.path.getsize(alive):
+        run_cmd([naabu,"-silent","-list",alive,"-o",ports],180)
 
-    print("[*] Starting sources")
-
-    for t in threads:
-        t.start()
-
-    for t in threads:
-        t.join()
-
-    save_file(
-        f"{recon_dir}/subfinder.txt",
-        subfinder_results
-    )
-
-    save_file(
-        f"{recon_dir}/amass.txt",
-        amass_results
-    )
-
-    save_file(
-        f"{recon_dir}/assetfinder.txt",
-        assetfinder_results
-    )
-
-    save_file(
-        f"{recon_dir}/crtsh.txt",
-        crtsh_results
-    )
-
-    all_subs = set()
-
-    all_subs.update(subfinder_results)
-    all_subs.update(amass_results)
-    all_subs.update(assetfinder_results)
-    all_subs.update(crtsh_results)
-
-    all_subs = {
-
-        x.strip()
-        for x in all_subs
-        if x.strip()
+    summary = {
+        "subdomains": sum(1 for _ in open(all_file,encoding="utf-8")) if os.path.exists(all_file) else 0,
+        "alive": sum(1 for _ in open(alive,encoding="utf-8")) if os.path.exists(alive) else 0,
+        "ports": sum(1 for _ in open(ports,encoding="utf-8")) if os.path.exists(ports) else 0
     }
 
-    save_file(
-        f"{recon_dir}/all_subdomains.txt",
-        all_subs
-    )
+    with open(os.path.join(base,"summary.json"),"w") as f:
+        json.dump(summary,f,indent=2)
 
-    print(f"[+] Unique Subdomains: {len(all_subs)}")
-
-    print("[*] Running HTTPX")
-
-    run_httpx(recon_dir)
-
-    print("[*] Running Naabu")
-
-    run_naabu(recon_dir)
-
-    alive_file = f"{recon_dir}/alive.txt"
-    ports_file = f"{recon_dir}/ports.txt"
-
-    alive_count = 0
-    ports_count = 0
-
-    if os.path.exists(alive_file):
-
-        with open(alive_file) as f:
-            alive_count = len(f.readlines())
-
-    if os.path.exists(ports_file):
-
-        with open(ports_file) as f:
-            ports_count = len(f.readlines())
-
-    print(f"[+] Alive Hosts: {alive_count}")
-    print(f"[+] Open Ports: {ports_count}")
-
-    print("\n[✓] Recon Complete")
-    print(f"[✓] Results -> {recon_dir}")
+    print(f"[+] Total Subdomains : {summary['subdomains']}")
+    print(f"[+] Alive Hosts      : {summary['alive']}")
+    print(f"[+] Open Ports       : {summary['ports']}")
+    print("[✓] Recon Finished")
