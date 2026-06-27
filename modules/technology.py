@@ -1,6 +1,5 @@
-from core.tech.headers import run
+from core.tech.headers import run as header_run
 
 
 def run(target):
-
-    run(target)
+    header_run(target)
