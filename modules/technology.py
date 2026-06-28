@@ -1,5 +1,7 @@
-from core.tech.headers import run as header_run
+from core.tech.detector import run as detect_run
 
-
-def run(target):
-    header_run(target)
+def run(target: str) -> None:
+    """
+    Wrapper to execute Technology Detection module.
+    """
+    detect_run(target)
