@@ -1,0 +1,1 @@
+from core.js.regex_patterns import PATTERNS
