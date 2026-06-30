@@ -125,6 +125,9 @@ def run_pipeline(mode: str, target_raw: str) -> None:
         
     elif mode == "race":
         run_module("race", base_url)
+
+    elif mode == "correlate":
+        run_module("correlate", base_url)
         
     elif mode == "full":
         log("\n[🔥] Starting Full Scan Pipeline\n")
@@ -159,7 +162,11 @@ def run_pipeline(mode: str, target_raw: str) -> None:
         run_module("param_finder", base_url)
         run_module("api_fuzzer", base_url)
         run_module("idor", base_url)
+
+        # Step 6: Attack Chain Correlation
+        run_module("correlate", base_url)
         
         log("\n[✓] Full Scan Pipeline Completed\n")
+
     else:
         log(f"[!] Invalid execution mode: {mode}")
