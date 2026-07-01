@@ -176,4 +176,10 @@ def run_pipeline(mode: str, target_raw: str) -> None:
 
 
     else:
+        # Check dynamic plugins
+        from core.plugin_manager import PluginManager
+        pm = PluginManager()
+        if pm.execute_plugin(mode, base_url):
+            return
         log(f"[!] Invalid execution mode: {mode}")
+
