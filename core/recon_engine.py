@@ -12,9 +12,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 from utils.logger import log
 
-TIMEOUT = 120
+TIMEOUT = 45
 
 TOOLS = {
+
     "subfinder": ["subfinder", "-silent", "-d", "{domain}"],
     "assetfinder": ["assetfinder", "--subs-only", "{domain}"],
     "amass": ["amass", "enum", "-passive", "-d", "{domain}"],
@@ -43,12 +44,17 @@ def run_cmd(cmd, timeout=TIMEOUT):
             text=True,
             timeout=timeout
         )
+        if r.returncode != 0:
+            log(f"[!] Command failed (code {r.returncode}): {' '.join(cmd)}")
+            if r.stderr:
+                log(f"[!] Stderr: {r.stderr.strip()}")
         return r.returncode == 0, r.stdout
     except subprocess.TimeoutExpired:
         log(f"[!] Timeout: {' '.join(cmd)}")
     except Exception as e:
         log(f"[!] Command error: {e}")
     return False, ""
+
 
 def save(path, data):
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -172,10 +178,14 @@ def run(domain):
     subs = set()
     for v in results.values():
         subs.update(v)
+    
+    # Ensure the root target domain itself is always in the subdomain target set
+    subs.add(domain)
 
     all_file = os.path.join(base, "all_subdomains.txt")
     save(all_file, subs)
     log(f"[+] Total Unique Subdomains gathered: {len(subs)}")
+
 
     # Setup file paths
     resolved_file = os.path.join(base, "resolved_subdomains.txt")
