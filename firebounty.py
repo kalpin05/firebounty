@@ -11,8 +11,9 @@ def main():
 
     parser.add_argument(
         "mode",
-        help="recon | waf | technology | bypass | js | param | api | idor | auth | brute | mutate | combo | jwt | race | correlate | full"
+        help="recon | waf | technology | bypass | js | param | api | idor | auth | brute | mutate | combo | jwt | race | correlate | report | full"
     )
+
 
 
     parser.add_argument(
