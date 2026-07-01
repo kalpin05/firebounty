@@ -128,6 +128,9 @@ def run_pipeline(mode: str, target_raw: str) -> None:
 
     elif mode == "correlate":
         run_module("correlate", base_url)
+
+    elif mode == "report":
+        run_module("report", base_url)
         
     elif mode == "full":
         log("\n[🔥] Starting Full Scan Pipeline\n")
@@ -165,8 +168,12 @@ def run_pipeline(mode: str, target_raw: str) -> None:
 
         # Step 6: Attack Chain Correlation
         run_module("correlate", base_url)
+
+        # Step 7: Compile Reports
+        run_module("report", base_url)
         
         log("\n[✓] Full Scan Pipeline Completed\n")
+
 
     else:
         log(f"[!] Invalid execution mode: {mode}")
