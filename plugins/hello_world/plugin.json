@@ -1,0 +1,6 @@
+{
+  "name": "Hello World Plugin",
+  "mode": "hello",
+  "entrypoint": "main.py",
+  "classname": "HelloWorld"
+}
