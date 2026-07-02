@@ -27,14 +27,23 @@ TOOLS = {
 }
 
 def resolve_tool(name):
-    for c in (
-        shutil.which(name),
+    candidates = []
+    if name == "httpx":
+        toolkit = shutil.which("httpx-toolkit")
+        if toolkit:
+            candidates.append(toolkit)
+            
+    candidates.extend([
         os.path.expanduser(f"~/go/bin/{name}"),
         f"/root/go/bin/{name}",
-    ):
+        shutil.which(name)
+    ])
+    
+    for c in candidates:
         if c and os.path.exists(c):
             return c
     return name
+
 
 def run_cmd(cmd, timeout=TIMEOUT):
     try:
