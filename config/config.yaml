@@ -14,3 +14,11 @@ httpx:
 logging:
   enabled: true
   level: INFO
+
+notifications:
+  telegram_token: ""
+  telegram_chat_id: ""
+  discord_webhook_url: ""
+
+oob:
+  collaborator_url: ""
