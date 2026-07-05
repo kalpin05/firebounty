@@ -126,6 +126,12 @@ def run_pipeline(mode: str, target_raw: str) -> None:
     elif mode == "race":
         run_module("race", base_url)
 
+    elif mode == "takeover":
+        run_module("takeover", domain)
+
+    elif mode == "links":
+        run_module("broken_links", base_url)
+
     elif mode == "correlate":
         run_module("correlate", base_url)
 
@@ -153,6 +159,8 @@ def run_pipeline(mode: str, target_raw: str) -> None:
         run_module("recon", base_url)  # runs endpoint discovery
         
         # Step 5: Active Scan Modules
+        run_module("takeover", domain)
+        run_module("broken_links", base_url)
         run_module("auth_bypass", base_url)
         run_module("param_bruteforce", base_url)
         run_module("wafdetect", base_url)
