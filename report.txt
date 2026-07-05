@@ -1,0 +1,2 @@
+[Subdomain Takeover] http://test.domain.com
+[Subdomain Takeover] http://test.domain.com
