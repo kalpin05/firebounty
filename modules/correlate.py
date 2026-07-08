@@ -1,7 +1,4 @@
-from core.correlation import run as run_correlator
+from core.correlate_engine import run as correlate_run
 
-def run(target: str) -> None:
-    """
-    Wrapper to execute Correlation Engine module.
-    """
-    run_correlator(target)
+def run(target):
+    correlate_run(target)
