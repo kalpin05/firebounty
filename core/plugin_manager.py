@@ -1,105 +1,75 @@
 """
-FireBounty v2 - Plugin Manager
-Dynamically discovers, validates, and loads user-defined custom plugins from plugins/ directory.
+FireBounty v2 - Dynamic Plugin Manager
+Allows runtime loading of custom scripts from the plugins directory.
 """
 
 import os
-import json
-import sys
 import importlib.util
-from typing import Dict, Any
 from utils.logger import log
 
 class PluginManager:
+    """
+    Manager to discover, load, and execute third-party plugins dynamically.
+    """
     def __init__(self, plugins_dir: str = "plugins"):
         self.plugins_dir = plugins_dir
-        self.plugins: Dict[str, Dict[str, Any]] = {}
-        self.discover_plugins()
+        os.makedirs(self.plugins_dir, exist_ok=True)
 
-    def discover_plugins(self) -> None:
+    def find_plugins(self) -> list:
         """
-        Scan plugins directory for folders containing valid plugin.json files.
+        Scans the plugins directory for Python modules.
+        Returns a list of absolute filepaths to plugin scripts.
         """
+        plugins = []
         if not os.path.exists(self.plugins_dir):
-            os.makedirs(self.plugins_dir, exist_ok=True)
-            return
+            return plugins
+            
+        for file in os.listdir(self.plugins_dir):
+            if file.endswith(".py") and not file.startswith("__"):
+                plugins.append(os.path.join(self.plugins_dir, file))
+        return plugins
 
-        for folder in os.listdir(self.plugins_dir):
-            folder_path = os.path.join(self.plugins_dir, folder)
-            if not os.path.isdir(folder_path):
-                continue
-
-            config_path = os.path.join(folder_path, "plugin.json")
-            if not os.path.exists(config_path):
-                continue
-
-            try:
-                with open(config_path, "r", encoding="utf-8") as f:
-                    meta = json.load(f)
-                
-                # Validation
-                mode = meta.get("mode")
-                entrypoint = meta.get("entrypoint", "main.py")
-                classname = meta.get("classname", "Plugin")
-                
-                if not mode:
-                    log(f"[!] Skipping plugin in {folder}: missing 'mode' configuration.")
-                    continue
-
-                self.plugins[mode] = {
-                    "name": meta.get("name", folder),
-                    "dir": folder_path,
-                    "entrypoint": entrypoint,
-                    "classname": classname
-                }
-            except Exception as e:
-                log(f"[!] Error reading plugin metadata in {folder}: {e}")
+    def load_plugin_module(self, filepath: str):
+        """
+        Dynamically imports a Python module from a given file path.
+        """
+        try:
+            module_name = os.path.splitext(os.path.basename(filepath))[0]
+            spec = importlib.util.spec_from_file_location(module_name, filepath)
+            if spec and spec.loader:
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module
+        except Exception as e:
+            log(f"[Plugin Manager] Error loading plugin from {filepath}: {e}")
+        return None
 
     def execute_plugin(self, mode: str, target: str) -> bool:
         """
-        Load and run the plugin matching the requested mode.
+        Checks all discovered plugins. If a plugin's MODE attribute matches the requested mode,
+        executes its run() function.
+        Returns True if a plugin was found and run, False otherwise.
         """
-        plugin_meta = self.plugins.get(mode)
-        if not plugin_meta:
-            return False
-
-        log(f"[*] Dynamically loading plugin: {plugin_meta['name']} (mode: {mode})")
+        plugin_files = self.find_plugins()
         
-        entrypoint_path = os.path.join(plugin_meta["dir"], plugin_meta["entrypoint"])
-        if not os.path.exists(entrypoint_path):
-            log(f"[!] Plugin entrypoint missing: {entrypoint_path}")
-            return False
-
-        try:
-            # Dynamic module import
-            spec = importlib.util.spec_from_file_location(
-                f"plugins_{mode}",
-                entrypoint_path
-            )
-            if not spec or not spec.loader:
-                return False
+        for filepath in plugin_files:
+            module = self.load_plugin_module(filepath)
+            if not module:
+                continue
                 
-            module = importlib.util.module_from_spec(spec)
-            # Add plugin directory to path temporarily to resolve local imports inside plugin
-            sys.path.insert(0, plugin_meta["dir"])
-            spec.loader.exec_module(module)
-            sys.path.pop(0)
-
-            classname = plugin_meta["classname"]
-            if not hasattr(module, classname):
-                log(f"[!] Plugin class {classname} not found in {entrypoint_path}")
-                return False
-
-            plugin_class = getattr(module, classname)
-            instance = plugin_class()
+            # A valid plugin must define a 'MODE' attribute and a 'run' function
+            plugin_mode = getattr(module, "MODE", None)
+            run_func = getattr(module, "run", None)
             
-            if hasattr(instance, "run"):
-                instance.run(target)
-                log(f"[✓] Plugin {plugin_meta['name']} executed successfully.")
-                return True
-            else:
-                log(f"[!] Plugin class {classname} missing run() method.")
-                return False
-        except Exception as e:
-            log(f"[!] Plugin execution failed: {e}")
-            return False
+            if plugin_mode == mode and run_func:
+                plugin_name = getattr(module, "NAME", os.path.splitext(os.path.basename(filepath))[0])
+                log(f"[Plugin Manager] Executing custom plugin: {plugin_name} (Mode: {plugin_mode})")
+                
+                try:
+                    run_func(target)
+                    return True
+                except Exception as e:
+                    log(f"[Plugin Manager] Plugin {plugin_name} failed during execution: {e}")
+                    return True  # Returned True because the mode matched, even though it failed
+                    
+        return False
