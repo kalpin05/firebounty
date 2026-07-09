@@ -1,245 +1,343 @@
 """
-FireBounty v2 - Reporting Engine
-Aggregates all module results and compiles HTML, Markdown, CSV, and JSON exports.
+FireBounty v2 - Extensible Reporting Engine
 """
 
 import os
 import json
 import csv
-import urllib.parse
 from utils.logger import log
 
-HTML_TEMPLATE = """<!DOCTYPE html>
+def load_json(filepath: str) -> list:
+    """
+    Safely loads JSON data from a file, returning a list.
+    """
+    if not os.path.exists(filepath):
+        return []
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        log(f"[Report] Error reading JSON {filepath}: {e}")
+        return []
+
+
+def generate_csv(threats: list, output_path: str) -> bool:
+    """
+    Generates a CSV report from findings.
+    """
+    try:
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        headers = ["Subdomain", "Severity", "Score", "Reason", "Threat Chain", "Secrets Count", "Endpoints Count"]
+        
+        with open(output_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(headers)
+            
+            for t in threats:
+                writer.writerow([
+                    t.get("subdomain"),
+                    t.get("severity"),
+                    t.get("score"),
+                    t.get("reason"),
+                    ", ".join(t.get("chain", [])),
+                    t.get("secrets_count", 0),
+                    t.get("endpoints_count", 0)
+                ])
+        return True
+    except Exception as e:
+        log(f"[Report] Error writing CSV report: {e}")
+        return False
+
+
+def generate_markdown(threats: list, target: str, output_path: str) -> bool:
+    """
+    Generates a Markdown report from findings.
+    """
+    try:
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        
+        # Calculate stats
+        severities = [t.get("severity") for t in threats]
+        critical = severities.count("CRITICAL")
+        high = severities.count("HIGH")
+        medium = severities.count("MEDIUM")
+        low = severities.count("LOW")
+        
+        md = f"""# FireBounty Security Assessment Report
+
+**Target:** {target}  
+**Total Priority Targets Analyzed:** {len(threats)}
+
+## 📊 Executive Summary
+
+| Severity | Count |
+| :--- | :--- |
+| 🔴 **Critical** | {critical} |
+| 🟠 **High** | {high} |
+| 🟡 **Medium** | {medium} |
+| 🔵 **Low** | {low} |
+
+---
+
+## 🔍 Detailed Vulnerability Exposure Findings
+"""
+        
+        for t in threats:
+            sub = t.get("subdomain")
+            sev = t.get("severity")
+            score = t.get("score")
+            reason = t.get("reason")
+            chain = t.get("chain", [])
+            endpoints_cnt = t.get("endpoints_count", 0)
+            secrets_cnt = t.get("secrets_count", 0)
+            prof = t.get("profile", {})
+            
+            md += f"""
+### 🌐 {sub}
+*   **Severity:** {sev} (Score: {score}/10)
+*   **Reason:** {reason}
+*   **Active Tech:** {', '.join(prof.get('frameworks', [])) or 'None detected'} | {', '.join(prof.get('servers', [])) or 'None detected'}
+*   **Exposed Findings:** {secrets_cnt} secrets found, {endpoints_cnt} interesting endpoints mapped.
+"""
+            if chain:
+                md += f"*   **Exposure Path:** `{' -> '.join(chain)}`\n"
+                
+            md += """
+#### Steps to Verify:
+1. Open the subdomain in your browser.
+2. Inspect network headers/responses to check for path exposure.
+3. Verify credential usage (if secrets are flagged) in the local findings.
+"""
+            md += "\n---\n"
+            
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(md)
+        return True
+    except Exception as e:
+        log(f"[Report] Error writing Markdown report: {e}")
+        return False
+
+
+def generate_html(threats: list, target: str, output_path: str) -> bool:
+    """
+    Generates a beautiful HTML report from findings.
+    """
+    try:
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        
+        # Calculate stats
+        severities = [t.get("severity") for t in threats]
+        critical = severities.count("CRITICAL")
+        high = severities.count("HIGH")
+        medium = severities.count("MEDIUM")
+        low = severities.count("LOW")
+        
+        # Build Table rows
+        table_rows = ""
+        for t in threats:
+            sub = t.get("subdomain")
+            sev = t.get("severity")
+            score = t.get("score")
+            reason = t.get("reason")
+            chain = t.get("chain", [])
+            endpoints_cnt = t.get("endpoints_count", 0)
+            secrets_cnt = t.get("secrets_count", 0)
+            
+            badge_class = f"badge-{sev.lower()}"
+            chain_html = " ".join([f"<span class='chain-item'>{c}</span>" for c in chain])
+            
+            table_rows += f"""
+            <tr>
+                <td><strong>{sub}</strong></td>
+                <td><span class="badge {badge_class}">{sev}</span></td>
+                <td>{score}/10</td>
+                <td>{reason}</td>
+                <td>{chain_html or 'N/A'}</td>
+                <td>{secrets_cnt}</td>
+                <td>{endpoints_cnt}</td>
+            </tr>
+            """
+            
+        html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>FireBounty Scan Report - {domain}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FireBounty Report - {target}</title>
     <style>
-        body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 40px; }}
-        .container {{ max-width: 1200px; margin: 0 auto; }}
-        h1 {{ color: #ef4444; border-bottom: 2px solid #ef4444; padding-bottom: 10px; }}
-        .grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }}
-        .card {{ background: #1e293b; padding: 20px; border-radius: 8px; border: 1px solid #334155; }}
-        .card-title {{ font-size: 14px; color: #94a3b8; text-transform: uppercase; margin-bottom: 10px; }}
-        .card-value {{ font-size: 28px; font-weight: bold; color: #38bdf8; }}
-        .section {{ background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 30px; margin-bottom: 30px; }}
-        .section-title {{ font-size: 20px; color: #f1f5f9; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-top: 0; margin-bottom: 20px; }}
-        table {{ width: 100%; border-collapse: collapse; margin-top: 10px; }}
-        th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #334155; }}
-        th {{ background: #0f172a; color: #94a3b8; }}
-        .badge {{ padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }}
-        .badge-high {{ background: #7f1d1d; color: #fca5a5; }}
-        .badge-medium {{ background: #78350f; color: #fde047; }}
-        .badge-low {{ background: #1e3a8a; color: #93c5fd; }}
+        body {{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f1f5f9;
+            margin: 0;
+            padding: 40px;
+        }}
+        .container {{
+            max-width: 1200px;
+            margin: 0 auto;
+        }}
+        h1, h2 {{
+            color: #38bdf8;
+        }}
+        .header {{
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }}
+        .stats-grid {{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }}
+        .stat-card {{
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #334155;
+        }}
+        .stat-card h3 {{
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }}
+        .stat-card p {{
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }}
+        .stat-critical {{ border-top: 4px solid #ef4444; }}
+        .stat-high {{ border-top: 4px solid #f97316; }}
+        .stat-medium {{ border-top: 4px solid #eab308; }}
+        .stat-low {{ border-top: 4px solid #3b82f6; }}
+        
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }}
+        th, td {{
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }}
+        th {{
+            background-color: #0f172a;
+            color: #38bdf8;
+            font-weight: 600;
+        }}
+        tr:hover {{
+            background-color: #334155;
+        }}
+        .badge {{
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+            text-transform: uppercase;
+        }}
+        .badge-critical {{ background-color: #ef4444; color: #fff; }}
+        .badge-high {{ background-color: #f97316; color: #fff; }}
+        .badge-medium {{ background-color: #eab308; color: #000; }}
+        .badge-low {{ background-color: #3b82f6; color: #fff; }}
+        .badge-info {{ background-color: #64748b; color: #fff; }}
+        
+        .chain-item {{
+            display: inline-block;
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 5px;
+            border: 1px solid #38bdf8;
+        }}
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>FireBounty Intelligence Report</h1>
-        <p style="color: #94a3b8;">Target Domain: <strong>{domain}</strong></p>
-        
-        <div class="grid">
-            <div class="card">
-                <div class="card-title">Subdomains Discovered</div>
-                <div class="card-value">{subdomains}</div>
-            </div>
-            <div class="card">
-                <div class="card-title">Alive Web Hosts</div>
-                <div class="card-value">{alive}</div>
-            </div>
-            <div class="card">
-                <div class="card-title">Leaked JS Secrets</div>
-                <div class="card-value">{secrets}</div>
-            </div>
-            <div class="card">
-                <div class="card-title">Vulnerabilities Found</div>
-                <div class="card-value">{vulnerabilities}</div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">High Priority Attack Paths</div>
-            {attack_paths_html}
-        </div>
-
-        <div class="section">
-            <div class="section-title">Active Vulnerabilities</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Severity</th>
-                        <th>Target Endpoint</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {vulns_table_rows}
-                </tbody>
-            </table>
+        <div class="header">
+            <h1>🔥 FireBounty Security Report</h1>
+            <p>Target: <strong>{target}</strong> | Assessment Priority Overview</p>
         </div>
         
-        <div class="section">
-            <div class="section-title">Mapped Technologies</div>
-            <p><strong>Servers:</strong> {servers_tech}</p>
-            <p><strong>Frameworks:</strong> {frameworks_tech}</p>
-            <p><strong>Cloud/CDNs:</strong> {cloud_tech}</p>
+        <div class="stats-grid">
+            <div class="stat-card stat-critical">
+                <h3>Critical</h3>
+                <p>{critical}</p>
+            </div>
+            <div class="stat-card stat-high">
+                <h3>High</h3>
+                <p>{high}</p>
+            </div>
+            <div class="stat-card stat-medium">
+                <h3>Medium</h3>
+                <p>{medium}</p>
+            </div>
+            <div class="stat-card stat-low">
+                <h3>Low</h3>
+                <p>{low}</p>
+            </div>
         </div>
+        
+        <h2>🔍 Prioritized Threat Findings</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Subdomain</th>
+                    <th>Severity</th>
+                    <th>Score</th>
+                    <th>Reason</th>
+                    <th>Threat Chain</th>
+                    <th>Secrets</th>
+                    <th>Endpoints</th>
+                </tr>
+            </thead>
+            <tbody>
+                {table_rows}
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
 """
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(html)
+        return True
+    except Exception as e:
+        log(f"[Report] Error writing HTML report: {e}")
+        return False
 
-class ReportEngine:
-    def __init__(self, domain: str):
-        self.domain = domain
-        self.base_path = f"outputs/{domain}"
-        self.reports_dir = os.path.join(self.base_path, "reports")
-        os.makedirs(self.reports_dir, exist_ok=True)
-        
-        # Load core artifacts data
-        self.summary_data = self._load_json("recon/summary.json")
-        self.tech_data = self._load_json("technology/technology.json")
-        self.js_data = self._load_json("javascript/javascript.json")
-        self.vuln_data = self._load_json("findings/vulnerabilities.json")
-        self.correlation_data = self._load_json("findings/correlations.json")
-
-    def _load_json(self, relative_path: str) -> dict:
-        path = os.path.join(self.base_path, relative_path)
-        if os.path.exists(path):
-            try:
-                with open(path, "r", encoding="utf-8") as f:
-                    return json.load(f)
-            except Exception:
-                pass
-        return {}
-
-    def compile_reports(self) -> None:
-        # Load stats
-        sub_count = self.summary_data.get("subdomains", 0)
-        alive_count = self.summary_data.get("alive", 0)
-        secrets_count = self.js_data.get("summary", {}).get("total_secrets_found", 0)
-        vuln_count = self.vuln_data.get("metrics", {}).get("total_vulnerabilities", 0)
-        
-        # Build vulnerabilities tables rows
-        vuln_rows = []
-        vulns_list = self.vuln_data.get("findings", [])
-        if vulns_list:
-            for v in vulns_list:
-                sev = v["severity"].lower()
-                badge_class = f"badge badge-{sev}"
-                vuln_rows.append(f"""
-                <tr>
-                    <td><strong>{v['type']}</strong></td>
-                    <td><span class="{badge_class}">{v['severity'].upper()}</span></td>
-                    <td><code>{v['url']}</code></td>
-                    <td>{v['detail']}</td>
-                </tr>
-                """)
-        else:
-            vuln_rows.append("<tr><td colspan='4'>No active vulnerabilities mapped.</td></tr>")
-            
-        # Build attack paths listings
-        path_blocks = []
-        paths_list = self.correlation_data.get("chains", [])
-        if paths_list:
-            for p in paths_list:
-                path_blocks.append(f"""
-                <div style="background: #0f172a; padding: 15px; border-radius: 6px; border-left: 4px solid #ef4444; margin-bottom: 15px;">
-                    <div style="font-weight: bold; color: #f1f5f9; font-size: 16px;">{p['title']} ({p['severity'].upper()})</div>
-                    <div style="color: #94a3b8; margin: 8px 0;">{p['reasoning']}</div>
-                    <div style="font-size: 13px; color: #38bdf8;">Impact: {p['impact']}</div>
-                </div>
-                """)
-        else:
-            path_blocks.append("<p>No prioritized attack chains mapped.</p>")
-            
-        # Mapped tech lists
-        tech_summary = self.tech_data.get("summary", {})
-        servers = ", ".join(tech_summary.get("servers", [])) or "None detected"
-        frameworks = ", ".join(tech_summary.get("frameworks", [])) or "None detected"
-        cloud = ", ".join(tech_summary.get("cloud", [])) or "None detected"
-        
-        # 1. Compile HTML Dashboard
-        html_content = HTML_TEMPLATE.format(
-            domain=self.domain,
-            subdomains=sub_count,
-            alive=alive_count,
-            secrets=secrets_count,
-            vulnerabilities=vuln_count,
-            attack_paths_html="".join(path_blocks),
-            vulns_table_rows="".join(vuln_rows),
-            servers_tech=servers,
-            frameworks_tech=frameworks,
-            cloud_tech=cloud
-        )
-        with open(os.path.join(self.reports_dir, "report.html"), "w", encoding="utf-8") as f:
-            f.write(html_content)
-            
-        # 2. Compile Markdown report
-        md_lines = [
-            f"# FireBounty Scan Report - {self.domain}\n",
-            f"**Subdomains Gathered:** {sub_count}",
-            f"**Alive Web Hosts:** {alive_count}",
-            f"**Identified Secrets:** {secrets_count}",
-            f"**Total Vulnerabilities:** {vuln_count}\n",
-            "## Mapped Technologies",
-            f"* **Servers:** {servers}",
-            f"* **Frameworks:** {frameworks}",
-            f"* **Cloud / CDNs:** {cloud}\n",
-            "## Prioritized Attack Chains"
-        ]
-        
-        for p in paths_list:
-            md_lines.append(f"### [{p['severity'].upper()}] {p['title']}")
-            md_lines.append(f"* **Reasoning:** {p['reasoning']}")
-            md_lines.append(f"* **Impact:** {p['impact']}\n")
-            
-        md_lines.append("## Vulnerability Registry Details")
-        for v in vulns_list:
-            md_lines.append(f"### [{v['severity'].upper()}] {v['type']}")
-            md_lines.append(f"* **URL:** {v['url']}")
-            md_lines.append(f"* **Detail:** {v['detail']}")
-            if v.get("proof_url"):
-                md_lines.append(f"* **Proof URL:** {v['proof_url']}")
-            md_lines.append("")
-            
-        with open(os.path.join(self.reports_dir, "report.md"), "w", encoding="utf-8") as f:
-            f.write("\n".join(md_lines))
-            
-        # 3. Compile CSV report
-        csv_path = os.path.join(self.reports_dir, "report.csv")
-        with open(csv_path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(["Severity", "Vulnerability Type", "Target URL", "Details", "Proof URL"])
-            for v in vulns_list:
-                writer.writerow([v["severity"], v["type"], v["url"], v["detail"], v.get("proof_url", "")])
-                
-        # 4. Compile JSON master db
-        json_path = os.path.join(self.reports_dir, "report.json")
-        master_db = {
-            "target": self.domain,
-            "statistics": {
-                "subdomains": sub_count,
-                "alive": alive_count,
-                "secrets": secrets_count,
-                "vulnerabilities": vuln_count
-            },
-            "technologies": tech_summary,
-            "attack_paths": paths_list,
-            "vulnerabilities": vulns_list
-        }
-        with open(json_path, "w", encoding="utf-8") as f:
-            json.dump(master_db, f, indent=4)
-            
-        log(f"[✓] Compiled HTML, MD, CSV, and JSON exports under outputs/{self.domain}/reports/")
 
 def run(target: str) -> None:
-    log("[*] Initializing Report Compilation Engine")
-    parsed = urllib.parse.urlparse(target)
-    domain = parsed.netloc or parsed.path.split('/')[0]
-    if ":" in domain:
-        domain = domain.split(":")[0]
+    """
+    Reads local correlated findings JSON and compiles HTML, MD, and CSV reports.
+    """
+    log(f"[*] Running Reporting Engine on {target}")
+    
+    findings_file = f"outputs/{target}/findings/correlated_threats.json"
+    if not os.path.exists(findings_file):
+        log(f"[!] Prioritized findings file {findings_file} not found. Skipping reporting.")
+        return
         
-    engine = ReportEngine(domain)
-    engine.compile_reports()
+    threats = load_json(findings_file)
+    if not threats:
+        log("[*] No threat profiles found in findings. Skipped reports generation.")
+        return
+        
+    reports_dir = f"outputs/{target}/reports"
+    
+    csv_ok = generate_csv(threats, f"{reports_dir}/report.csv")
+    md_ok = generate_markdown(threats, target, f"{reports_dir}/report.md")
+    html_ok = generate_html(threats, target, f"{reports_dir}/report.html")
+    
+    if csv_ok and md_ok and html_ok:
+        log(f"[SUCCESS] Reporting Engine completed. Reports generated inside outputs/{target}/reports/")
+    else:
+        log("[!] Some reports failed to compile. Check errors above.")
