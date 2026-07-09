@@ -1,7 +1,4 @@
-from core.report_engine import run as run_report
+from core.report_engine import run as report_run
 
-def run(target: str) -> None:
-    """
-    Wrapper to execute Report Compilation module.
-    """
-    run_report(target)
+def run(target):
+    report_run(target)
