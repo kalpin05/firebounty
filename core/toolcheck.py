@@ -38,10 +38,10 @@ def check_tools() -> dict:
                     break
 
         if resolved:
-            print(f"[✓] {tool}")
+            print(f"[+] {tool}")
             results[tool] = True
         else:
-            print(f"[✗] {tool}")
+            print(f"[-] {tool}")
             results[tool] = False
 
     return results
