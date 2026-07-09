@@ -73,7 +73,7 @@ def run_pipeline(mode: str, target_raw: str) -> None:
     """
     Central orchestrator for all modes and pipelines in FireBounty v2.
     """
-    log(f"[🔥] Initializing runner for mode: {mode}")
+    log(f"[*] Initializing runner for mode: {mode}")
     
     # 1. Dependency Checking
     check_tools()
@@ -139,7 +139,7 @@ def run_pipeline(mode: str, target_raw: str) -> None:
         run_module("report", base_url)
         
     elif mode == "full":
-        log("\n[🔥] Starting Full Scan Pipeline\n")
+        log("\n[*] Starting Full Scan Pipeline\n")
         
         # Step 1: Subdomain gathering (takes raw domain)
         run_module("subdomain", domain)
@@ -149,7 +149,7 @@ def run_pipeline(mode: str, target_raw: str) -> None:
         alive_file = os.path.join("outputs", domain, "recon", "alive.txt")
         if not os.path.exists(alive_file) or os.path.getsize(alive_file) == 0:
             log("[!] Stop scan: No alive hosts discovered in subdomain recon.")
-            log("[✓] Scan Completed (No target active)")
+            log("[SUCCESS] Scan Completed (No target active)")
             return
             
         # Step 3: Run technology discovery
@@ -180,7 +180,7 @@ def run_pipeline(mode: str, target_raw: str) -> None:
         # Step 7: Compile Reports
         run_module("report", base_url)
         
-        log("\n[✓] Full Scan Pipeline Completed\n")
+        log("\n[SUCCESS] Full Scan Pipeline Completed\n")
 
 
     else:
