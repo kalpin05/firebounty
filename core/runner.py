@@ -137,6 +137,9 @@ def run_pipeline(mode: str, target_raw: str) -> None:
 
     elif mode == "report":
         run_module("report", base_url)
+
+    elif mode == "parameters":
+        run_module("parameters", base_url)
         
     elif mode == "full":
         log("\n[*] Starting Full Scan Pipeline\n")
@@ -157,6 +160,9 @@ def run_pipeline(mode: str, target_raw: str) -> None:
         
         # Step 4: Run GAU/Wayback/Katana
         run_module("recon", base_url)  # runs endpoint discovery
+        
+        # Step 4.5: Dynamic Parameter Extraction
+        run_module("parameters", base_url)
         
         # Step 5: Active Scan Modules
         run_module("takeover", domain)
