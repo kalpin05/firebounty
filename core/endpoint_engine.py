@@ -231,11 +231,20 @@ def extract_interesting(endpoints):
 # Main
 # ----------------------------------
 
+import urllib.parse
+
 def run(target):
 
     print("\n[*] Running Endpoint Engine")
 
-    base = f"outputs/{target}"
+    parsed = urllib.parse.urlparse(target)
+    domain = parsed.netloc or parsed.path.split('/')[0]
+    if ":" in domain:
+        domain = domain.split(":")[0]
+    if not domain:
+        domain = target
+
+    base = f"outputs/{domain}"
 
     endpoint_dir = f"{base}/endpoints"
 
