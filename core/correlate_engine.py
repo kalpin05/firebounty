@@ -55,7 +55,14 @@ def run(target: str) -> None:
     """
     log(f"[*] Running Exploit Chain Correlation Engine on {target}")
     
-    target_dir = f"outputs/{target}"
+    parsed = urllib.parse.urlparse(target)
+    domain = parsed.netloc or parsed.path.split('/')[0]
+    if ":" in domain:
+        domain = domain.split(":")[0]
+    if not domain:
+        domain = target
+
+    target_dir = f"outputs/{domain}"
     if not os.path.exists(target_dir):
         log(f"[!] Target output folder {target_dir} not found. Skipping correlation.")
         return
