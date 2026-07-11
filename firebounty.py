@@ -22,7 +22,7 @@ def print_banner():
         print(banner)
         print(f"   {Fore.CYAN}* FireBounty v2 - Bug Bounty & WAF Testing CLI Framework *")
         print(f"   {Fore.GREEN}>> Modes: recon | waf | technology | bypass | js | param | api | idor | auth | brute")
-        print(f"             mutate | combo | jwt | race | takeover | links | correlate | report | full")
+        print(f"             mutate | combo | jwt | race | takeover | links | correlate | report | parameters | full")
         print(f"   {Fore.YELLOW}>> Disclaimer: For authorized security testing and research only!")
         print("=" * 86 + "\n")
     except Exception:
@@ -40,7 +40,7 @@ def print_banner():
         print(banner)
         print("   * FireBounty v2 - Bug Bounty & WAF Testing CLI Framework *")
         print("   >> Modes: recon | waf | technology | bypass | js | param | api | idor | auth | brute")
-        print("             mutate | combo | jwt | race | takeover | links | correlate | report | full")
+        print("             mutate | combo | jwt | race | takeover | links | correlate | report | parameters | full")
         print("   >> Disclaimer: For authorized security testing and research only!")
         print("======================================================================================\n")
 
@@ -54,7 +54,7 @@ def main():
 
     parser.add_argument(
         "mode",
-        help="recon | waf | technology | bypass | js | param | api | idor | auth | brute | mutate | combo | jwt | race | takeover | links | correlate | report | full"
+        help="recon | waf | technology | bypass | js | param | api | idor | auth | brute | mutate | combo | jwt | race | takeover | links | correlate | report | parameters | full"
     )
 
     parser.add_argument(
