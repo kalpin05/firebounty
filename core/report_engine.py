@@ -5,6 +5,7 @@ FireBounty v2 - Extensible Reporting Engine
 import os
 import json
 import csv
+import urllib.parse
 from utils.logger import log
 
 def load_json(filepath: str) -> list:
@@ -321,7 +322,14 @@ def run(target: str) -> None:
     """
     log(f"[*] Running Reporting Engine on {target}")
     
-    findings_file = f"outputs/{target}/findings/correlated_threats.json"
+    parsed = urllib.parse.urlparse(target)
+    domain = parsed.netloc or parsed.path.split('/')[0]
+    if ":" in domain:
+        domain = domain.split(":")[0]
+    if not domain:
+        domain = target
+
+    findings_file = f"outputs/{domain}/findings/correlated_threats.json"
     if not os.path.exists(findings_file):
         log(f"[!] Prioritized findings file {findings_file} not found. Skipping reporting.")
         return
@@ -331,13 +339,13 @@ def run(target: str) -> None:
         log("[*] No threat profiles found in findings. Skipped reports generation.")
         return
         
-    reports_dir = f"outputs/{target}/reports"
+    reports_dir = f"outputs/{domain}/reports"
     
     csv_ok = generate_csv(threats, f"{reports_dir}/report.csv")
-    md_ok = generate_markdown(threats, target, f"{reports_dir}/report.md")
-    html_ok = generate_html(threats, target, f"{reports_dir}/report.html")
+    md_ok = generate_markdown(threats, domain, f"{reports_dir}/report.md")
+    html_ok = generate_html(threats, domain, f"{reports_dir}/report.html")
     
     if csv_ok and md_ok and html_ok:
-        log(f"[SUCCESS] Reporting Engine completed. Reports generated inside outputs/{target}/reports/")
+        log(f"[SUCCESS] Reporting Engine completed. Reports generated inside outputs/{domain}/reports/")
     else:
         log("[!] Some reports failed to compile. Check errors above.")
