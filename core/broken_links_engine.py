@@ -5,6 +5,7 @@ FireBounty v2 - Broken Link Hijacking Engine
 import os
 import re
 import requests
+import urllib.parse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from utils.logger import log
 from utils.notifier import send_alert
@@ -110,8 +111,14 @@ def run(target: str) -> None:
     """
     Main entry point for broken link hijacking checks.
     """
-    log(f"[*] Running broken social links scan on {target}")
-    endpoints_file = f"outputs/{target}/endpoints/all_endpoints.txt"
+    parsed = urllib.parse.urlparse(target)
+    domain = parsed.netloc or parsed.path.split('/')[0]
+    if ":" in domain:
+        domain = domain.split(":")[0]
+    if not domain:
+        domain = target
+
+    endpoints_file = f"outputs/{domain}/endpoints/all_endpoints.txt"
     
     if not os.path.exists(endpoints_file):
         log(f"[!] Endpoints file {endpoints_file} not found. Skipping broken link check.")
