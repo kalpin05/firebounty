@@ -107,16 +107,13 @@ def scan_url_for_broken_links(target_url: str) -> list:
     return broken_findings
 
 
+from utils.helpers import sanitize_target
+
 def run(target: str) -> None:
     """
     Main entry point for broken link hijacking checks.
     """
-    parsed = urllib.parse.urlparse(target)
-    domain = parsed.netloc or parsed.path.split('/')[0]
-    if ":" in domain:
-        domain = domain.split(":")[0]
-    if not domain:
-        domain = target
+    domain, _ = sanitize_target(target)
 
     endpoints_file = f"outputs/{domain}/endpoints/all_endpoints.txt"
     
