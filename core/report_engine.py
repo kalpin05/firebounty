@@ -316,18 +316,15 @@ def generate_html(threats: list, target: str, output_path: str) -> bool:
         return False
 
 
+from utils.helpers import sanitize_target
+
 def run(target: str) -> None:
     """
     Reads local correlated findings JSON and compiles HTML, MD, and CSV reports.
     """
     log(f"[*] Running Reporting Engine on {target}")
     
-    parsed = urllib.parse.urlparse(target)
-    domain = parsed.netloc or parsed.path.split('/')[0]
-    if ":" in domain:
-        domain = domain.split(":")[0]
-    if not domain:
-        domain = target
+    domain, _ = sanitize_target(target)
 
     findings_file = f"outputs/{domain}/findings/correlated_threats.json"
     if not os.path.exists(findings_file):
