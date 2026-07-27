@@ -9,32 +9,8 @@ import inspect
 from typing import Tuple, Dict, Any
 
 from utils.logger import log
+from utils.helpers import sanitize_target
 from core.toolcheck import check_tools
-
-def sanitize_target(target_raw: str) -> Tuple[str, str]:
-    """
-    Parse raw target input into a clean domain and a base URL.
-    
-    Example:
-        "https://example.com/api" -> ("example.com", "https://example.com")
-        "example.com"             -> ("example.com", "https://example.com")
-    """
-    target = target_raw.strip()
-    if not target.startswith(("http://", "https://")):
-        # Default to https for scanning
-        parsed_target = "https://" + target
-    else:
-        parsed_target = target
-
-    parsed = urllib.parse.urlparse(parsed_target)
-    domain = parsed.netloc or parsed.path.split('/')[0]
-    
-    # Strip port if present
-    if ":" in domain:
-        domain = domain.split(":")[0]
-        
-    base_url = f"{parsed.scheme or 'https'}://{domain}"
-    return domain, base_url
 
 def run_module(module_name: str, target: str, is_pipeline: bool = False) -> bool:
     """
