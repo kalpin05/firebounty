@@ -54,18 +54,15 @@ def is_valid_param(param: str) -> bool:
     return True
 
 
+from utils.helpers import sanitize_target
+
 def run(target: str) -> None:
     """
     Reads crawled endpoints for the target and extracts unique query parameters.
     """
     log(f"[*] Running Parameter Intelligence on {target}")
     
-    parsed = urllib.parse.urlparse(target)
-    domain = parsed.netloc or parsed.path.split('/')[0]
-    if ":" in domain:
-        domain = domain.split(":")[0]
-    if not domain:
-        domain = target
+    domain, _ = sanitize_target(target)
 
     target_dir = f"outputs/{domain}"
     endpoints_file = f"{target_dir}/endpoints/all_endpoints.txt"
