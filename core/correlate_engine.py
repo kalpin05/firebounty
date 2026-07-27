@@ -49,18 +49,15 @@ def load_json(filepath: str) -> dict:
         return {}
 
 
+from utils.helpers import sanitize_target
+
 def run(target: str) -> None:
     """
     Runs the correlation engine on local target scan output logs.
     """
     log(f"[*] Running Exploit Chain Correlation Engine on {target}")
     
-    parsed = urllib.parse.urlparse(target)
-    domain = parsed.netloc or parsed.path.split('/')[0]
-    if ":" in domain:
-        domain = domain.split(":")[0]
-    if not domain:
-        domain = target
+    domain, _ = sanitize_target(target)
 
     target_dir = f"outputs/{domain}"
     if not os.path.exists(target_dir):
