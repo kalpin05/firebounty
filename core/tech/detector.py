@@ -145,17 +145,15 @@ def save_results(domain: str, results_list: list) -> None:
         
     log(f"[✓] Technology profiles saved for {domain} inside technology/")
 
+from utils.helpers import sanitize_target
+
 def run(target: str) -> None:
     """
     Run Technology Detection.
     """
     log("[*] Initializing Technology Detection Engine")
     
-    # Parse target domain
-    parsed = urllib.parse.urlparse(target)
-    domain = parsed.netloc or parsed.path.split('/')[0]
-    if ":" in domain:
-        domain = domain.split(":")[0]
+    domain, _ = sanitize_target(target)
         
     # Attempt to read alive hosts
     alive_file = f"outputs/{domain}/recon/alive.txt"
