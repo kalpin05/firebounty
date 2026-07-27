@@ -82,18 +82,15 @@ def scan_local_file(filepath: str) -> list:
         return []
 
 
+from utils.helpers import sanitize_target
+
 def run(target: str) -> None:
     """
     Scans downloaded JavaScript files inside target's directory.
     """
     log(f"[*] Running local JavaScript Secret Hunter on {target}")
     
-    parsed = urllib.parse.urlparse(target)
-    domain = parsed.netloc or parsed.path.split('/')[0]
-    if ":" in domain:
-        domain = domain.split(":")[0]
-    if not domain:
-        domain = target
+    domain, _ = sanitize_target(target)
 
     # We look for JS files in the outputs directory recursively
     target_dir = f"outputs/{domain}"
