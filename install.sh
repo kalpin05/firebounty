@@ -1,291 +1,160 @@
 #!/bin/bash
 
 # ======================================
-# FireBounty v2 Installer
+# FireBounty v2 Installer for Kali Linux
 # ======================================
 
-INSTALLED_TOOLS=()
-FAILED_TOOLS=()
+set -euo pipefail
 
 echo "======================================"
 echo "      FireBounty v2 Installer"
 echo "======================================"
 
 # --------------------------------------
-# Update System
+# 1. Update System Package Lists
 # --------------------------------------
-
 echo ""
 echo "[*] Updating package lists..."
-
 if sudo apt update; then
-    echo "[✓] apt update successful"
+    echo "[✓] Package lists updated."
 else
-    echo "[!] apt update failed"
-    echo "[!] Continuing installation..."
+    echo "[!] apt update failed, attempting package install anyway..."
 fi
 
 # --------------------------------------
-# Base Packages
+# 2. Install Base & Standard Tools via APT
 # --------------------------------------
-
 echo ""
-echo "[*] Installing base packages..."
-
+echo "[*] Installing dependencies via apt..."
 sudo apt install -y \
     python3 \
+    python3-pip \
+    python3-venv \
     git \
     curl \
     wget \
     unzip \
-    nmap || true
+    nmap \
+    subfinder \
+    amass \
+    assetfinder \
+    httpx-toolkit \
+    dnsx \
+    ffuf \
+    findomain || true
 
 # --------------------------------------
-# Verify Python
+# 3. Check and Install Python Requirements
 # --------------------------------------
-
 echo ""
-echo "[*] Checking Python..."
-
-if ! command -v python3 >/dev/null 2>&1
-then
-    echo "[✗] Python3 not found"
+echo "[*] Checking Python environment..."
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "[✗] Python3 is not installed. Exiting."
     exit 1
 fi
 
-echo "[✓] Python Found"
-
-# --------------------------------------
-# Ensure Pip
-# --------------------------------------
-
-echo ""
-echo "[*] Checking pip..."
-
-python3 -m ensurepip --default-pip >/dev/null 2>&1 || true
-
-if python3 -m pip --version >/dev/null 2>&1
-then
-    echo "[✓] pip available"
-else
-    echo "[!] pip unavailable"
-    echo "[!] Skipping Python package installation"
+if [ -f requirements.txt ]; then
+    echo "[*] Installing Python packages from requirements.txt..."
+    python3 -m pip install --break-system-packages -r requirements.txt || \
+    python3 -m pip install -r requirements.txt || \
+    echo "[!] Non-blocking warning: Python dependencies installation had issues."
 fi
 
 # --------------------------------------
-# Install Python Requirements
+# 4. Check and Install Go Environment (Fallback for missing Go binaries)
 # --------------------------------------
-
-if [ -f requirements.txt ]
-then
-
-    echo ""
-    echo "[*] Installing Python requirements..."
-
-    python3 -m pip install --upgrade pip
-
-    python3 -m pip install -r requirements.txt
-
-fi
-
-# --------------------------------------
-# Install Go
-# --------------------------------------
-
 echo ""
 echo "[*] Checking Go..."
+GO_PATH_DIR="$HOME/go/bin"
+mkdir -p "$GO_PATH_DIR"
 
-if ! command -v go >/dev/null 2>&1
-then
-
-    echo "[*] Installing Go..."
-
-    GO_VERSION="1.24.5"
-
-    wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz
-
-    sudo rm -rf /usr/local/go
-
-    sudo tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz
-
-    rm go${GO_VERSION}.linux-amd64.tar.gz
-
+if ! command -v go >/dev/null 2>&1; then
+    if [ ! -d "/usr/local/go" ]; then
+        echo "[*] Installing Go Lang..."
+        GO_VERSION="1.21.6"
+        wget -q "https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz"
+        sudo rm -rf /usr/local/go
+        sudo tar -C /usr/local -xzf "go${GO_VERSION}.linux-amd64.tar.gz"
+        rm "go${GO_VERSION}.linux-amd64.tar.gz"
+    fi
+    export PATH=$PATH:/usr/local/go/bin:$GO_PATH_DIR
+else
+    echo "[✓] Go is already installed."
 fi
+
+# Set PATH variables in shell RC files if not present
+for shell_rc in "$HOME/.zshrc" "$HOME/.bashrc"; do
+    if [ -f "$shell_rc" ]; then
+        if ! grep -q 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' "$shell_rc"; then
+            echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> "$shell_rc"
+        fi
+    fi
+done
+
+# Ensure PATH matches locally for the rest of the script
+export PATH=$PATH:/usr/local/go/bin:$GO_PATH_DIR
 
 # --------------------------------------
-# Configure PATH
+# 5. Install Additional Tools via Go
 # --------------------------------------
-
-mkdir -p "$HOME/go/bin"
-
-if ! grep -q 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' ~/.zshrc 2>/dev/null
-then
-    echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> ~/.zshrc
-fi
-
-if ! grep -q 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' ~/.bashrc 2>/dev/null
-then
-    echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> ~/.bashrc
-fi
-
-export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
-
 echo ""
-echo "[✓] Go Version:"
-go version
-
-# --------------------------------------
-# Function
-# --------------------------------------
+echo "[*] Installing additional Go utilities..."
 
 install_go_tool() {
-
-    TOOL_NAME=$1
-    TOOL_PATH=$2
-
-    echo ""
-    echo "[*] Installing $TOOL_NAME"
-
-    if go install "${TOOL_PATH}@latest"
-    then
-
-        echo "[✓] $TOOL_NAME installed"
-
-        INSTALLED_TOOLS+=("$TOOL_NAME")
-
+    local name=$1
+    local path=$2
+    if ! command -v "$name" >/dev/null 2>&1 && [ ! -f "$GO_PATH_DIR/$name" ]; then
+        echo "[*] Compiling $name..."
+        go install "${path}@latest" || echo "[!] Failed to install $name via go install"
     else
-
-        echo "[✗] $TOOL_NAME failed"
-
-        FAILED_TOOLS+=("$TOOL_NAME")
-
+        echo "[✓] $name is already installed."
     fi
 }
 
-# --------------------------------------
-# Recon Tools
-# --------------------------------------
-
-echo ""
-echo "[*] Installing FireBounty Recon Tools..."
-
-install_go_tool \
-"subfinder" \
-"github.com/projectdiscovery/subfinder/v2/cmd/subfinder"
-
-install_go_tool \
-"assetfinder" \
-"github.com/tomnomnom/assetfinder"
-
-install_go_tool \
-"httpx" \
-"github.com/projectdiscovery/httpx/cmd/httpx"
-
-install_go_tool \
-"dnsx" \
-"github.com/projectdiscovery/dnsx/cmd/dnsx"
-
-install_go_tool \
-"naabu" \
-"github.com/projectdiscovery/naabu/v2/cmd/naabu"
-
-install_go_tool \
-"katana" \
-"github.com/projectdiscovery/katana/cmd/katana"
-
-install_go_tool \
-"gau" \
-"github.com/lc/gau/v2/cmd/gau"
-
-install_go_tool \
-"amass" \
-"github.com/owasp-amass/amass/v4/..."
-# --------------------------------------
-# Output Structure
-# --------------------------------------
-
-echo ""
-echo "[*] Creating FireBounty folders..."
-
-
+install_go_tool "waybackurls" "github.com/tomnomnom/waybackurls"
+install_go_tool "katana" "github.com/projectdiscovery/katana/cmd/katana"
+install_go_tool "gau" "github.com/lc/gau/v2/cmd/gau"
 
 # --------------------------------------
-# Verification
+# 6. Verification Report
 # --------------------------------------
-
 echo ""
 echo "======================================"
 echo " Installed Tools Verification"
 echo "======================================"
 
-TOOLS=(
-subfinder
-assetfinder
-httpx
-dnsx
-naabu
-katana
-gau
-waybackurls
-amass
-nmap
+REQUIRED_TOOLS=(
+    subfinder
+    amass
+    assetfinder
+    dnsx
+    ffuf
+    nmap
+    findomain
+    waybackurls
+    katana
+    gau
 )
 
-for tool in "${TOOLS[@]}"
-do
-
-   if [ -f "$HOME/go/bin/$tool" ]
-then
-    echo "[✓] $tool (Go)"
-elif command -v "$tool" >/dev/null 2>&1
-then
-    echo "[✓] $tool (System)"
-else
-    echo "[✗] $tool"
-fi
-
+for tool in "${REQUIRED_TOOLS[@]}"; do
+    if command -v "$tool" >/dev/null 2>&1 || [ -f "$GO_PATH_DIR/$tool" ]; then
+        echo "[✓] $tool is available."
+    else
+        echo "[✗] $tool is MISSING."
+    fi
 done
 
-# --------------------------------------
-# Summary
-# --------------------------------------
-
-echo ""
-echo "======================================"
-echo " FireBounty Installation Summary"
-echo "======================================"
-
-echo ""
-echo "[✓] Installed Tools"
-
-for tool in "${INSTALLED_TOOLS[@]}"
-do
-    echo "    $tool"
-done
-
-echo ""
-
-if [ ${#FAILED_TOOLS[@]} -gt 0 ]
-then
-
-    echo "[!] Failed Tools"
-
-    for tool in "${FAILED_TOOLS[@]}"
-    do
-        echo "    $tool"
-    done
-
+# Special verification check for httpx (prioritizing httpx-toolkit)
+if command -v httpx-toolkit >/dev/null 2>&1 || command -v httpx >/dev/null 2>&1 || [ -f "$GO_PATH_DIR/httpx" ]; then
+    echo "[✓] httpx is available."
 else
-
-    echo "[✓] No installation failures"
-
+    echo "[✗] httpx is MISSING."
 fi
 
 echo ""
 echo "======================================"
-echo "[🔥] FireBounty Ready"
+echo "[🔥] FireBounty Installation Complete!"
 echo "======================================"
-
-echo ""
-echo "Usage:"
-echo "python3 firebounty.py recon example.com"
+echo "To start scanning, run:"
+echo "  python3 firebounty.py"
+echo "======================================"
